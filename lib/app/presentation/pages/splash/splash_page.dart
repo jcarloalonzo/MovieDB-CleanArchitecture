@@ -38,6 +38,8 @@ class _SplashPageState extends State<SplashPage> {
 
     final hasInternet = await connectivityRepository.hasInternet();
 
+    print('has intenret: ->>> $hasInternet');
+
     //
     //
     if (hasInternet) {
@@ -57,8 +59,9 @@ class _SplashPageState extends State<SplashPage> {
       } else if (mounted) {
         _goTo(Routes.signin);
       }
+    } else {
+      _goTo(Routes.offline);
     }
-    print(hasInternet);
   }
 
   void _goTo(String routeName) {

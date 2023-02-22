@@ -1,4 +1,3 @@
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 import '../../../domain/repositories/connecivity_repository.dart';
@@ -19,10 +18,10 @@ class ConnectivityRepositoryImpl implements ConnectivityRepository {
       print('no conectado a internet');
       return false;
     }
-
-    return _internetChecker.hasInternet();
-    // return Future.value(true);
     // el package connectivity plus no valida si hay conexion con internet .
+
+// lo separamos para que pueda testearse
+    return _internetChecker.hasInternet();
   }
 
   //EL ANTERIOR
