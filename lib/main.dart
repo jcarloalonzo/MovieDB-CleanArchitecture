@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 import 'app/data/datasource/authentication_repository_impl.dart';
 import 'app/data/datasource/connectivity_repository_impl.dart';
+import 'app/data/http/http.dart';
 import 'app/data/services/remote/authentication_api.dart';
 import 'app/data/services/remote/internet_checker.dart';
 import 'app/domain/repositories/authentication_repository.dart';
@@ -15,7 +16,8 @@ void main() {
   runApp(
     Injector(
         authenticationRepository: AuthenticationRepositoryImpl(
-            const FlutterSecureStorage(), AuthenticationAPI(http.Client())),
+            const FlutterSecureStorage(),
+            AuthenticationAPI(Http( http.Client()))),
         connectivityRepository: ConnectivityRepositoryImpl(
           Connectivity(),
           InternetChecker(),

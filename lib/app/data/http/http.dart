@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart';
@@ -28,6 +29,7 @@ class Http {
     HttpMethod method = HttpMethod.get,
     Map<String, String> headers = const {},
     Map<String, String> queryParameters = const {},
+    Map<String, dynamic> body = const {},
     bool userApiKey = true,
   }) async {
     try {
@@ -52,6 +54,7 @@ class Http {
       };
 
       late final Response response;
+      final bodyString = jsonEncode(body);
 
       switch (method) {
         case HttpMethod.get:
@@ -61,13 +64,14 @@ class Http {
           response = await _client.post(
             url,
             headers: headers,
+            body: bodyString,
           );
-
           break;
         case HttpMethod.patch:
           response = await _client.patch(
             url,
             headers: headers,
+            body: bodyString,
           );
 
           break;
@@ -76,7 +80,10 @@ class Http {
 
           break;
         case HttpMethod.put:
-          await _client.put(url);
+          await _client.put(
+            url,
+            body: bodyString,
+          );
 
           break;
       }
