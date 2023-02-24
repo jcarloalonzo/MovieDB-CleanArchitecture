@@ -31,21 +31,37 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   @override
   Future<Either<SignInFailure, User>> signIn(
       String username, String password) async {
-    await _authenticationAPI.createRequestToken();
+    final requestToken = await _authenticationAPI.createRequestToken();
 
-    // await Future.delayed(const Duration(seconds: 2));
-    // if (username != 'test') {
-    //   return Either.left(SignInFailure.notFound);
-    // }
+    if (requestToken == null) {
+      return Either.left(SignInFailure.unknown);
+    }
 
-    // if (password != '123456') {
-    //   return Either.left(SignInFailure.unauthorized);
-    // }
+    final loginResult = await _authenticationAPI.createSessionWithLogin(
+      username: username,
+      password: password,
+      requestToken: requestToken,
+    );
+    print(loginResult);
 
-    // await _secureStorage.write(key: _key, value: '123');
+    return loginResult.when(
+      (failure) async => Either.left(failure),
+      (newRequestToken) async {
+        final sessionResult =
+            await _authenticationAPI.createSession(newRequestToken);
+        print(sessionResult);
 
-    // return Either.right(User());
-    return Either.left(SignInFailure.notFound);
+        sessionResult.when(
+          (failure) async => Either.left(failure),
+          (sessionId) async {
+            await _secureStorage.write(key: _key, value: sessionId);
+          },
+        );
+//
+
+        return Either.right(User());
+      },
+    );
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../../../../main.dart';
 import '../../../../domain/enums.dart';
@@ -33,12 +34,12 @@ class _SignInPageState extends State<SignInPage> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     onChanged: (text) {
                       setState(() {
-                        _username = text.trim().toLowerCase();
+                        _username = text.trim();
                       });
                     },
                     decoration: const InputDecoration(hintText: 'Username'),
                     validator: (text) {
-                      text = text?.trim().toLowerCase() ?? '';
+                      text = text?.trim() ?? '';
                       if (text.isEmpty) {
                         return 'Invalid Username';
                       }
@@ -49,11 +50,11 @@ class _SignInPageState extends State<SignInPage> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     onChanged: (text) {
                       setState(() {
-                        _password = text.replaceAll(' ', '').toLowerCase();
+                        _password = text.replaceAll(' ', '');
                       });
                     },
                     validator: (text) {
-                      text = text?.replaceAll(' ', '').toLowerCase() ?? '';
+                      text = text?.replaceAll(' ', '') ?? '';
                       if (text.length < 4) {
                         return 'Invalid Password';
                       }
@@ -78,37 +79,49 @@ class _SignInPageState extends State<SignInPage> {
                       child: const Text('Sign in'),
                     );
                   }),
-                  // ElevatedButton(
-                  //   onPressed: () async {
-                  //     const secureStorage = FlutterSecureStorage();
-                  //     final sessionId = await secureStorage.read(key: _key);
-                  //     print(sessionId);
-                  //     //
-                  //     //
-                  //   },
-                  //   child: const Text('read'),
-                  // ),
-                  // ElevatedButton(
-                  //   onPressed: () async {
-                  //     const secureStorage = FlutterSecureStorage();
-                  //     await secureStorage.write(
-                  //         key: _key,
-                  //         value: 'Hola hola prueba xd{Hola:pruebaxd:}');
-                  //     //
-                  //     //
-                  //   },
-                  //   child: const Text('write'),
-                  // ),
-                  // ElevatedButton(
-                  //   onPressed: () async {
-                  //     const secureStorage = FlutterSecureStorage();
-                  //     await secureStorage.delete(key: _key);
+                  ElevatedButton(
+                    onPressed: () async {
+                      const secureStorage = FlutterSecureStorage();
+                      final sessionId = await secureStorage.read(key: _key);
+                      print(sessionId);
+                      //
+                      //
+                    },
+                    child: const Text('read'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      const secureStorage = FlutterSecureStorage();
+                      await secureStorage.write(
+                          key: _key,
+                          value: 'Hola hola prueba xd{Hola:pruebaxd:}');
+                      //
+                      //
+                    },
+                    child: const Text('write'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      const secureStorage = FlutterSecureStorage();
+                      await secureStorage.delete(key: _key);
 
-                  //     //
-                  //     //
-                  //   },
-                  //   child: const Text('delete'),
-                  // ),
+                      //
+                      //
+                    },
+                    child: const Text('delete'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      final bloc =
+                          Injector.of(context).authenticationRepository;
+
+                      final x = await bloc.signIn('onthenob', 'PCtronix1997');
+                      print(x);
+                      //
+                      //
+                    },
+                    child: const Text('probar buttom'),
+                  ),
                 ],
               ),
             ),
@@ -118,7 +131,7 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  // final String _key = 'sessionID';
+  final String _key = 'sessionID';
 
   Future _submit(BuildContext context) async {
     setState(() {
@@ -129,6 +142,7 @@ class _SignInPageState extends State<SignInPage> {
         .authenticationRepository
         .signIn(_username, _password);
 
+    print(result);
 // * VALIDA SI ESTÁ RENDERIZADO
     print(mounted);
     if (!mounted) {
@@ -145,6 +159,7 @@ class _SignInPageState extends State<SignInPage> {
         SignInFailure.notFound: 'Not Found',
         SignInFailure.unauthorized: 'Invalid Password',
         SignInFailure.unknown: 'Error',
+        SignInFailure.network: 'Network error',
       }[failure];
 
       ScaffoldMessenger.of(context).showSnackBar(
