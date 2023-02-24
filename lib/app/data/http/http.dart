@@ -5,19 +5,13 @@ import 'package:http/http.dart';
 
 import '../../domain/either/either.dart';
 
-enum HttpMethod { get, post, patch, delete, put }
-
-class HttpFailure {
-  HttpFailure({this.statusCode, this.exception});
-
-  final int? statusCode;
-  final Object? exception;
-}
-
-class NetworkException {}
-
 class Http {
-  Http(this._baseUrl, this._apiKey, this._client);
+  // client es publico asi que asignamops
+  Http(
+      {required Client client, required String baseUrl, required String apiKey})
+      : _client = client,
+        _apiKey = apiKey,
+        _baseUrl = baseUrl;
 
 // +SON INYECCIONES DE DEPENDECIA FACILMENTE TESTEABLES CON PRUEBAS UNITARIAS
   final String _baseUrl;
@@ -117,3 +111,14 @@ class Http {
     }
   }
 }
+
+enum HttpMethod { get, post, patch, delete, put }
+
+class HttpFailure {
+  HttpFailure({this.statusCode, this.exception});
+
+  final int? statusCode;
+  final Object? exception;
+}
+
+class NetworkException {}

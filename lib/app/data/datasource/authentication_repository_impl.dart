@@ -31,35 +31,38 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   @override
   Future<Either<SignInFailure, User>> signIn(
       String username, String password) async {
-    final requestToken = await _authenticationAPI.createRequestToken();
-
-    if (requestToken == null) {
-      return Either.left(SignInFailure.unknown);
-    }
-
-    final loginResult = await _authenticationAPI.createSessionWithLogin(
-      username: username,
-      password: password,
-      requestToken: requestToken,
-    );
-    print(loginResult);
-
-    return loginResult.when(
-      (failure) async => Either.left(failure),
-      (newRequestToken) async {
-        final sessionResult =
-            await _authenticationAPI.createSession(newRequestToken);
-        print(sessionResult);
-
-        sessionResult.when(
-          (failure) async => Either.left(failure),
-          (sessionId) async {
-            await _secureStorage.write(key: _key, value: sessionId);
-          },
+    final requestTokenResult = await _authenticationAPI.createRequestToken();
+    return requestTokenResult.when(
+      (failure) async {
+//
+        return Either.left(failure);
+      },
+      (requestToken) async {
+        final loginResult = await _authenticationAPI.createSessionWithLogin(
+          username: username,
+          password: password,
+          requestToken: requestToken,
         );
+        print(loginResult);
+
+        return loginResult.when(
+          (failure) async => Either.left(failure),
+          (newRequestToken) async {
+            final sessionResult =
+                await _authenticationAPI.createSession(newRequestToken);
+            print(sessionResult);
+
+            sessionResult.when(
+              (failure) async => Either.left(failure),
+              (sessionId) async {
+                await _secureStorage.write(key: _key, value: sessionId);
+              },
+            );
 //
 
-        return Either.right(User());
+            return Either.right(User());
+          },
+        );
       },
     );
   }

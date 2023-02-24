@@ -16,8 +16,15 @@ void main() {
   runApp(
     Injector(
         authenticationRepository: AuthenticationRepositoryImpl(
-            const FlutterSecureStorage(),
-            AuthenticationAPI(Http( http.Client()))),
+          const FlutterSecureStorage(),
+          AuthenticationAPI(
+            Http(
+              baseUrl: 'https://api.themoviedb.org/3',
+              apiKey: '8f8784dbe3b56f66943479112eb78617',
+              client: http.Client(),
+            ),
+          ),
+        ),
         connectivityRepository: ConnectivityRepositoryImpl(
           Connectivity(),
           InternetChecker(),
@@ -30,7 +37,7 @@ class Injector extends InheritedWidget {
   const Injector(
       {required this.connectivityRepository,
       required this.authenticationRepository,
-      super.key,
+      super.key,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
       required super.child});
 
   final ConnectivityRepository connectivityRepository;

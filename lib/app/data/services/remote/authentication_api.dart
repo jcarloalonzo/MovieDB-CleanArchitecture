@@ -10,7 +10,7 @@ class AuthenticationAPI {
 
   final Http _http;
 
-  Future<String?> createRequestToken() async {
+  Future<Either<SignInFailure, String>> createRequestToken() async {
     final result = await _http.request('/authentication/token/new');
 
     // final requestToken = result.when((result) {
@@ -22,12 +22,16 @@ class AuthenticationAPI {
     // return requestToken;
 
     return result.when(
-      (result) {
-        return null;
+      (failure) {
+        print(failure.runtimeType);
+        if (failure.exception is NetworkException) {
+          return Either.left(SignInFailure.network);
+        }
+        return Either.left(SignInFailure.unknown);
       },
       (responseBody) {
         final json = Map<String, dynamic>.from(jsonDecode(responseBody));
-        return json['request_token'] as String;
+        return Either.right(json['request_token'] as String);
       },
     );
   }
