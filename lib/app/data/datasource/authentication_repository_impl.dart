@@ -1,10 +1,10 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../../../domain/either/either.dart';
-import '../../../domain/enums.dart';
-import '../../../domain/models/user.dart';
-import '../../../domain/repositories/authentication_repository.dart';
-import '../../services/remote/authentication_api.dart';
+import '../../domain/either/either.dart';
+import '../../domain/enums.dart';
+import '../../domain/models/user.dart';
+import '../../domain/repositories/authentication_repository.dart';
+import '../services/remote/authentication_api.dart';
 
 const _key = 'sessionID';
 
