@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import '../../../domain/either/either.dart';
 import '../../../domain/enums.dart';
@@ -10,9 +9,37 @@ class AuthenticationAPI {
 
   final Http _http;
 
-  Future<Either<SignInFailure, String>> createRequestToken() async {
-    final result = await _http.request('/authentication/token/new');
+  Either<SignInFailure, String> _handleFailure(HttpFailure failure) {
+    if (failure.statusCode != null) {
+      switch (failure.statusCode) {
+        case 401:
+          return Either.left(SignInFailure.unauthorized);
+        case 404:
+          return Either.left(SignInFailure.notFound);
+        default:
+          return Either.left(SignInFailure.unknown);
+      }
+    }
 
+    if (failure.exception is NetworkException) {
+      return Either.left(
+        SignInFailure.network,
+      );
+    }
+
+    return Either.left(
+      SignInFailure.unknown,
+    );
+  }
+
+  Future<Either<SignInFailure, String>> createRequestToken() async {
+    final result = await _http.request(
+      '/authentication/token/new',
+      onSuccess: (responseBody) {
+        final json = Map<String, dynamic>.from(jsonDecode(responseBody));
+        return json['request_token'] as String;
+      },
+    );
     // final requestToken = result.when((result) {
     //   return null;
     // }, (responseBody) {
@@ -20,18 +47,13 @@ class AuthenticationAPI {
     //   return json['request_token'] as String;
     // });
     // return requestToken;
-
+    print(result);
     return result.when(
       (failure) {
-        print(failure.runtimeType);
-        if (failure.exception is NetworkException) {
-          return Either.left(SignInFailure.network);
-        }
-        return Either.left(SignInFailure.unknown);
+        return _handleFailure(failure);
       },
-      (responseBody) {
-        final json = Map<String, dynamic>.from(jsonDecode(responseBody));
-        return Either.right(json['request_token'] as String);
+      (requestToken) {
+        return Either.right(requestToken);
       },
     );
   }
@@ -49,35 +71,21 @@ class AuthenticationAPI {
         'password': password,
         'request_token': requestToken,
       },
+      onSuccess: (responseBody) {
+        final json = Map<String, dynamic>.from(jsonDecode(responseBody));
+        print(json['request_token'] as String);
+        return json['request_token'] as String;
+      },
     );
+    print(result);
 
-    return result.when((failure) {
-      if (failure.statusCode != null) {
-        switch (failure.statusCode) {
-          case 401:
-            return Either.left(SignInFailure.unauthorized);
-          case 404:
-            return Either.left(SignInFailure.notFound);
-          default:
-            return Either.left(SignInFailure.unknown);
-        }
-      }
-
-      if (failure.exception is NetworkException) {
-        return Either.left(
-          SignInFailure.network,
-        );
-      }
-
-      return Either.left(
-        SignInFailure.unknown,
-      );
-    }, (responseBody) {
-      final json = Map<String, dynamic>.from(jsonDecode(responseBody));
-
-      final newRequestToken = json['request_token'] as String;
-      return Either.right(newRequestToken);
-    });
+    return result.when(
+      // *es lo mismo que lo de arriba
+      _handleFailure,
+      (requestToken) {
+        return Either.right(requestToken);
+      },
+    );
   }
 
   //
@@ -91,17 +99,17 @@ class AuthenticationAPI {
       body: {
         'request_token': requestToken,
       },
+      onSuccess: (responseBody) {
+        final json = Map<String, dynamic>.from(jsonDecode(responseBody));
+        return json['session_id'] as String;
+      },
     );
 
+    print(result);
     return result.when((failure) {
-      if (failure is SocketException) {
-        return Either.left(SignInFailure.network);
-      }
-      return Either.left(SignInFailure.unknown);
-    }, (responseBody) {
-      final json = Map<String, dynamic>.from(jsonDecode(responseBody));
-      final sessionID = json['session_id'] as String;
-      return Either.right(sessionID);
+      return _handleFailure(failure);
+    }, (sessionId) {
+      return Either.right(sessionId);
     });
   }
 }

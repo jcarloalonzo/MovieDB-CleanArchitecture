@@ -18,12 +18,13 @@ class Http {
   final String _apiKey;
   final Client _client;
 
-  Future<Either<HttpFailure, String>> request(
+  Future<Either<HttpFailure, R>> request<R>(
     String path, {
     HttpMethod method = HttpMethod.get,
     Map<String, String> headers = const {},
     Map<String, String> queryParameters = const {},
     Map<String, dynamic> body = const {},
+    required R Function(String responseBody) onSuccess,
     bool userApiKey = true,
   }) async {
     try {
@@ -86,7 +87,7 @@ class Http {
 
       if (statusCode >= 200 && statusCode < 300) {
         // SI SE CUMPLE ES PORQUE LA FUNCION SE CUMPLIO E
-        return Either.right(response.body);
+        return Either.right(onSuccess(response.body));
       }
 
       return Either.left(
