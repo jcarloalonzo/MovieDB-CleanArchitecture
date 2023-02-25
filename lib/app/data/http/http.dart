@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 
 import '../../domain/either/either.dart';
@@ -27,6 +29,9 @@ class Http {
     required R Function(String responseBody) onSuccess,
     bool userApiKey = true,
   }) async {
+    Map<String, dynamic> logs = {};
+    StackTrace? stackTrace;
+
     try {
       if (userApiKey) {
         queryParameters = {
@@ -50,6 +55,12 @@ class Http {
 
       late final Response response;
       final bodyString = jsonEncode(body);
+
+      logs = {
+        'url': url.toString(),
+        'method': method.name,
+        'body': body,
+      };
 
       switch (method) {
         case HttpMethod.get:
@@ -85,6 +96,13 @@ class Http {
 
       final statusCode = response.statusCode;
 
+      logs = {
+        ...logs,
+        'startTime': DateTime.now().toString(),
+        'statusCode': statusCode,
+        'responseBody': response.body,
+      };
+
       if (statusCode >= 200 && statusCode < 300) {
         // SI SE CUMPLE ES PORQUE LA FUNCION SE CUMPLIO E
         return Either.right(onSuccess(response.body));
@@ -95,10 +113,20 @@ class Http {
           statusCode: statusCode,
         ),
       );
-    } catch (e) {
-      // SocketException , pertenece al paquete dart:io lo que significa que no es compatible en web
+    } catch (e, s) {
+      stackTrace = s;
 
+      // * EL STACKTRACE NOS PERMITE SABER EN QUE LINEA OCURRIO NUESTRO ERROR
+      // SocketException , pertenece al paquete dart:io lo que significa que no es compatible en web
+      logs = {
+        ...logs,
+        'exception': e.runtimeType,
+      };
       if (e is SocketException || e is ClientException) {
+        logs = {
+          ...logs,
+          'exception': 'NetworkException',
+        };
         Either.left(
           HttpFailure(
             exception: NetworkException(),
@@ -109,6 +137,21 @@ class Http {
       return Either.left(
         HttpFailure(exception: e),
       );
+    } finally {
+// el finnally siempre se ejecuta en un trycatch
+      if (kDebugMode) {
+        logs = {
+          ...logs,
+          'endTime': DateTime.now().toString(),
+        };
+        log('''
+🔥
+-----------------------------------------------------------------
+${(const JsonEncoder.withIndent(' ').convert(logs))}
+-----------------------------------------------------------------
+🔥
+''', stackTrace: stackTrace);
+      }
     }
   }
 }
