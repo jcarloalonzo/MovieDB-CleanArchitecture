@@ -5,6 +5,7 @@ import '../../../domain/enums.dart';
 import '../../../domain/repositories/authentication_repository.dart';
 import '../../routes/routes.dart';
 import 'sign_in_controller.dart';
+import 'sign_in_state.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage._();
@@ -12,6 +13,9 @@ class SignInPage extends StatelessWidget {
   static Widget init(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => SignInController(
+// nos pide pasar el estado inicial
+          const SignInState()
+
           // apiRepositoryInterface: context.read<ApiRepositoryInterface>(),
           // localRepositoryInterface: context.read<LocalRepositoryInterface>(),
           ),
