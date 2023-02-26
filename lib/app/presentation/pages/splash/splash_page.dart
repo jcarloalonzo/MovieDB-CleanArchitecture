@@ -34,14 +34,8 @@ class _SplashPageState extends State<SplashPage> {
 
   _init() async {
     final routeName = await () async {
-      final connectivityRepository = Provider.of<ConnectivityRepository>(
-        context,
-        listen: false,
-      );
-      final authenticationRepository = Provider.of<AuthenticationRepository>(
-        context,
-        listen: false,
-      );
+      final connectivityRepository = context.read<ConnectivityRepository>();
+      final authenticationRepository = context.read<AuthenticationRepository>();
 
       final hasInternet = await connectivityRepository.hasInternet();
 

@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
         child: TextButton(
           onPressed: () {
             //
-            Provider.of<AuthenticationRepository>(context,listen: false).signOut();
+            context.read<AuthenticationRepository>().signOut();
 
             Navigator.pushReplacementNamed(context, Routes.signin);
           },

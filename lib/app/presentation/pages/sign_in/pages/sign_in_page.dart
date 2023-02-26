@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../domain/enums.dart';
+import '../../../../domain/repositories/account_repository.dart';
 import '../../../../domain/repositories/authentication_repository.dart';
 import '../../../routes/routes.dart';
 
@@ -78,37 +79,6 @@ class _SignInPageState extends State<SignInPage> {
                       child: const Text('Sign in'),
                     );
                   }),
-                  // ElevatedButton(
-                  //   onPressed: () async {
-                  //     const secureStorage = FlutterSecureStorage();
-                  //     final sessionId = await secureStorage.read(key: _key);
-                  //     print(sessionId);
-                  //     //
-                  //     //
-                  //   },
-                  //   child: const Text('read'),
-                  // ),
-                  // ElevatedButton(
-                  //   onPressed: () async {
-                  //     const secureStorage = FlutterSecureStorage();
-                  //     await secureStorage.write(
-                  //         key: _key,
-                  //         value: 'Hola hola prueba xd{Hola:pruebaxd:}');
-                  //     //
-                  //     //
-                  //   },
-                  //   child: const Text('write'),
-                  // ),
-                  // ElevatedButton(
-                  //   onPressed: () async {
-                  //     const secureStorage = FlutterSecureStorage();
-                  //     await secureStorage.delete(key: _key);
-
-                  //     //
-                  //     //
-                  //   },
-                  //   child: const Text('delete'),
-                  // ),
                 ],
               ),
             ),
@@ -121,11 +91,14 @@ class _SignInPageState extends State<SignInPage> {
   final String _key = 'sessionID';
 
   Future _submit(BuildContext context) async {
+    context.read<AccountRepository>();
+
     setState(() {
       _fetching = true;
     });
 
-    final result = await Provider.of<AuthenticationRepository>(context,listen: false)
+    final result = await context
+        .read<AuthenticationRepository>()
         .signIn(_username, _password);
 
     print(result);
