@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import '../../../domain/either/either.dart';
 import '../../../domain/enums.dart';
 import '../../http/http.dart';
@@ -36,8 +34,13 @@ class AuthenticationAPI {
     final result = await _http.request(
       '/authentication/token/new',
       onSuccess: (responseBody) {
-        final json = Map<String, dynamic>.from(jsonDecode(responseBody));
+        print(responseBody);
+        // final json = Map<String, dynamic>.from(jsonDecode(responseBody));
+        final json = responseBody as Map;
+
+        print(json);
         return json['request_token'] as String;
+        // return 'qwe';
       },
     );
     // final requestToken = result.when((result) {
@@ -66,14 +69,17 @@ class AuthenticationAPI {
       '/authentication/token/validate_with_login',
       method: HttpMethod.post,
       userApiKey: true,
-      body: {
+      bodyRequest: {
         'username': username,
         'password': password,
         'request_token': requestToken,
       },
       onSuccess: (responseBody) {
-        final json = Map<String, dynamic>.from(jsonDecode(responseBody));
-        print(json['request_token'] as String);
+        print(responseBody);
+        // final json = Map<String, dynamic>.from(jsonDecode(responseBody));
+        // print(json['request_token'] as String);
+        final json = responseBody as Map;
+
         return json['request_token'] as String;
       },
     );
@@ -96,11 +102,14 @@ class AuthenticationAPI {
     final result = await _http.request(
       '/authentication/session/new',
       method: HttpMethod.post,
-      body: {
+      bodyRequest: {
         'request_token': requestToken,
       },
       onSuccess: (responseBody) {
-        final json = Map<String, dynamic>.from(jsonDecode(responseBody));
+        print(responseBody);
+        // final json = Map<String, dynamic>.from(jsonDecode(responseBody));
+        final json = responseBody as Map;
+
         return json['session_id'] as String;
       },
     );

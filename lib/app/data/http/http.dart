@@ -25,8 +25,8 @@ class Http {
     HttpMethod method = HttpMethod.get,
     Map<String, String> headers = const {},
     Map<String, String> queryParameters = const {},
-    Map<String, dynamic> body = const {},
-    required R Function(String responseBody) onSuccess,
+    Map<String, dynamic> bodyRequest = const {},
+    required R Function(dynamic responseBody) onSuccess,
     bool userApiKey = true,
   }) async {
     Map<String, dynamic> logs = {};
@@ -47,21 +47,17 @@ class Http {
       if (queryParameters.isNotEmpty) {
         url = url.replace(queryParameters: queryParameters);
       }
-
       headers = {
         'Content-Type': 'application/json',
         ...headers,
       };
-
       late final Response response;
-      final bodyString = jsonEncode(body);
-
+      final bodyString = jsonEncode(bodyRequest);
       logs = {
         'url': url.toString(),
         'method': method.name,
-        'body': body,
+        'body': bodyRequest,
       };
-
       switch (method) {
         case HttpMethod.get:
           response = await _client.get(url);
@@ -88,6 +84,7 @@ class Http {
         case HttpMethod.put:
           await _client.put(
             url,
+            headers: headers,
             body: bodyString,
           );
 
@@ -95,17 +92,24 @@ class Http {
       }
 
       final statusCode = response.statusCode;
-
+      print(response.body);
+      final responseBody = _parseResponseBody(
+        response.body,
+      );
+      print(responseBody);
       logs = {
         ...logs,
         'startTime': DateTime.now().toString(),
         'statusCode': statusCode,
-        'responseBody': response.body,
+        'responseBody': responseBody,
       };
-
       if (statusCode >= 200 && statusCode < 300) {
-        // SI SE CUMPLE ES PORQUE LA FUNCION SE CUMPLIO E
-        return Either.right(onSuccess(response.body));
+        print('statuc dodeeee🔥');
+        return Either.right(
+          onSuccess(
+            responseBody,
+          ),
+        );
       }
 
       return Either.left(
@@ -114,6 +118,7 @@ class Http {
         ),
       );
     } catch (e, s) {
+      print(e);
       stackTrace = s;
 
       // * EL STACKTRACE NOS PERMITE SABER EN QUE LINEA OCURRIO NUESTRO ERROR
@@ -166,3 +171,11 @@ class HttpFailure {
 }
 
 class NetworkException {}
+
+dynamic _parseResponseBody(String responseBody) {
+  try {
+    return jsonDecode(responseBody);
+  } catch (_) {
+    return responseBody;
+  }
+}
