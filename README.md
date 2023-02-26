@@ -17,3 +17,10 @@ in aplication add android:allowBackup="true"
     <application android:label="tv" android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher" android:allowBackup="true">
 ```
+
+<!--  -->
+
+dart fix --dry-run # preview of the proposed changes
+dart fix --apply # apply the changes
+
+<!--  -->

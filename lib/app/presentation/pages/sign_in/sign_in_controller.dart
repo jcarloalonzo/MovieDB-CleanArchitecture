@@ -1,27 +1,34 @@
 import 'package:flutter/foundation.dart';
 
+import 'sign_in_state.dart';
+
 // * está clase va a notificar a la vista.
 //  esto es para que sea amigable con pruebas unitarias
 
 class SignInController extends ChangeNotifier {
-  String _username = '', _password = '';
-  bool _fetching = false, _mounted = true;
+  // SignInState _state = SignInState(username: '', password: '', fetching: false);
+  SignInState _state = SignInState();
 
-  String get username => _username;
-  String get password => _password;
-  bool get fetching => _fetching;
+  SignInState get state => _state;
+
+  bool _mounted = true;
+
   bool get mounted => _mounted;
 
   void onUserNameChanged(String text) {
-    _username = text.trim();
+    // _state = SignInState(
+    //     username: text.trim().toLowerCase(),
+    //     password: _state.password,
+    //     fetching: _state.fetching);
+    _state = _state.copywith(username: text.trim().toLowerCase());
   }
 
   void onPasswordChanged(String text) {
-    _password = text.replaceAll(' ', '');
+    _state = _state.copywith(password: text.replaceAll(' ', ''));
   }
 
   void onFetchingChanged(bool value) {
-    _fetching = value;
+    _state = _state.copywith(fetching: value);
     notifyListeners();
   }
 
@@ -33,13 +40,4 @@ class SignInController extends ChangeNotifier {
     super.dispose();
     _mounted = false;
   }
-}
-
-
-class SignInState {
-  SignInState(
-      {required this.username, required this.password, required this.fetching});
-
-  final String username, password;
-  final bool fetching;
 }

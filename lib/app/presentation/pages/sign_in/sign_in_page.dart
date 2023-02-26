@@ -33,7 +33,7 @@ class SignInPage extends StatelessWidget {
               final bloc = context.watch<SignInController>();
 
               return AbsorbPointer(
-                absorbing: bloc.fetching,
+                absorbing: bloc.state.fetching,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -62,7 +62,7 @@ class SignInPage extends StatelessWidget {
                       decoration: const InputDecoration(hintText: 'Password'),
                     ),
                     const SizedBox(height: 20),
-                    if (bloc.fetching)
+                    if (bloc.state.fetching)
                       const CircularProgressIndicator()
                     else
                       MaterialButton(
@@ -92,7 +92,7 @@ class SignInPage extends StatelessWidget {
 
     final result = await context
         .read<AuthenticationRepository>()
-        .signIn(bloc.username, bloc.password);
+        .signIn(bloc.state.username, bloc.state.password);
 
     print(result);
 // * VALIDA SI ESTÁ RENDERIZADO
