@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 
-import '../../../../../main.dart';
 import '../../../../domain/enums.dart';
+import '../../../../domain/repositories/authentication_repository.dart';
 import '../../../routes/routes.dart';
 
 class SignInPage extends StatefulWidget {
@@ -71,7 +71,6 @@ class _SignInPageState extends State<SignInPage> {
                       onPressed: () {
                         final isValid = Form.of(context).validate();
                         if (isValid) {
-                          //
                           _submit(context);
                         }
                       },
@@ -79,49 +78,37 @@ class _SignInPageState extends State<SignInPage> {
                       child: const Text('Sign in'),
                     );
                   }),
-                  ElevatedButton(
-                    onPressed: () async {
-                      const secureStorage = FlutterSecureStorage();
-                      final sessionId = await secureStorage.read(key: _key);
-                      print(sessionId);
-                      //
-                      //
-                    },
-                    child: const Text('read'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      const secureStorage = FlutterSecureStorage();
-                      await secureStorage.write(
-                          key: _key,
-                          value: 'Hola hola prueba xd{Hola:pruebaxd:}');
-                      //
-                      //
-                    },
-                    child: const Text('write'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      const secureStorage = FlutterSecureStorage();
-                      await secureStorage.delete(key: _key);
+                  // ElevatedButton(
+                  //   onPressed: () async {
+                  //     const secureStorage = FlutterSecureStorage();
+                  //     final sessionId = await secureStorage.read(key: _key);
+                  //     print(sessionId);
+                  //     //
+                  //     //
+                  //   },
+                  //   child: const Text('read'),
+                  // ),
+                  // ElevatedButton(
+                  //   onPressed: () async {
+                  //     const secureStorage = FlutterSecureStorage();
+                  //     await secureStorage.write(
+                  //         key: _key,
+                  //         value: 'Hola hola prueba xd{Hola:pruebaxd:}');
+                  //     //
+                  //     //
+                  //   },
+                  //   child: const Text('write'),
+                  // ),
+                  // ElevatedButton(
+                  //   onPressed: () async {
+                  //     const secureStorage = FlutterSecureStorage();
+                  //     await secureStorage.delete(key: _key);
 
-                      //
-                      //
-                    },
-                    child: const Text('delete'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      final bloc =
-                          Injector.of(context).authenticationRepository;
-
-                      final x = await bloc.signIn('onthenob', 'PCtronix1997');
-                      print(x);
-                      //
-                      //
-                    },
-                    child: const Text('probar buttom'),
-                  ),
+                  //     //
+                  //     //
+                  //   },
+                  //   child: const Text('delete'),
+                  // ),
                 ],
               ),
             ),
@@ -138,8 +125,7 @@ class _SignInPageState extends State<SignInPage> {
       _fetching = true;
     });
 
-    final result = await Injector.of(context)
-        .authenticationRepository
+    final result = await Provider.of<AuthenticationRepository>(context,listen: false)
         .signIn(_username, _password);
 
     print(result);

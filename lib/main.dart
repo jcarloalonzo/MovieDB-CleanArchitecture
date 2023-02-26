@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 import 'app/data/datasource/authentication_repository_impl.dart';
 import 'app/data/datasource/connectivity_repository_impl.dart';
@@ -14,41 +15,23 @@ import 'app/presentation/my_app.dart';
 
 void main() {
   runApp(
-    Injector(
-        authenticationRepository: AuthenticationRepositoryImpl(
-          const FlutterSecureStorage(),
-          AuthenticationAPI(
-            Http(
-              baseUrl: 'https://api.themoviedb.org/3',
-              apiKey: '8f8784dbe3b56f66943479112eb78617',
-              client: http.Client(),
-            ),
-          ),
-        ),
-        connectivityRepository: ConnectivityRepositoryImpl(
-          Connectivity(),
-          InternetChecker(),
-        ),
-        child: const MyApp()),
+    Provider<ConnectivityRepository>(
+      create: (context) => ConnectivityRepositoryImpl(
+        Connectivity(),
+        InternetChecker(),
+      ),
+      child: Provider<AuthenticationRepository>(
+          create: (context) => AuthenticationRepositoryImpl(
+                const FlutterSecureStorage(),
+                AuthenticationAPI(
+                  Http(
+                    baseUrl: 'https://api.themoviedb.org/3',
+                    apiKey: '8f8784dbe3b56f66943479112eb78617',
+                    client: http.Client(),
+                  ),
+                ),
+              ),
+          child: const MyApp()),
+    ),
   );
-}
-
-class Injector extends InheritedWidget {
-  const Injector(
-      {required this.connectivityRepository,
-      required this.authenticationRepository,
-      super.key,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
-      required super.child});
-
-  final ConnectivityRepository connectivityRepository;
-  final AuthenticationRepository authenticationRepository;
-
-  @override
-  bool updateShouldNotify(_) => false;
-
-  static Injector of(BuildContext context) {
-    final injector = context.dependOnInheritedWidgetOfExactType<Injector>();
-    assert(injector != null, 'Injector could not be found');
-    return injector!;
-  }
 }

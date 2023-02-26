@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../../../../main.dart';
+import '../../../../domain/repositories/authentication_repository.dart';
 import '../../../routes/routes.dart';
 
 class HomePage extends StatelessWidget {
@@ -13,7 +14,7 @@ class HomePage extends StatelessWidget {
         child: TextButton(
           onPressed: () {
             //
-            Injector.of(context).authenticationRepository.signOut();
+            Provider.of<AuthenticationRepository>(context,listen: false).signOut();
 
             Navigator.pushReplacementNamed(context, Routes.signin);
           },

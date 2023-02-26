@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
-import '../../../../main.dart';
+import '../../../domain/repositories/authentication_repository.dart';
+import '../../../domain/repositories/connecivity_repository.dart';
 import '../../routes/routes.dart';
 
 class SplashPage extends StatefulWidget {
@@ -31,36 +33,36 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   _init() async {
-    final injector = Injector.of(context);
-    // ConnectivityRepository connectivityRepository =
-    final connectivityRepository = injector.connectivityRepository;
-    //     ConnectivityRepositoryImpl();
+    final routeName = await () async {
+      final connectivityRepository = Provider.of<ConnectivityRepository>(
+        context,
+        listen: false,
+      );
+      final authenticationRepository = Provider.of<AuthenticationRepository>(
+        context,
+        listen: false,
+      );
 
-    final hasInternet = await connectivityRepository.hasInternet();
+      final hasInternet = await connectivityRepository.hasInternet();
 
-    print('has intenret: ->>> $hasInternet');
-
-    //
-    //
-    if (hasInternet) {
-      final authenticationRepository = injector.authenticationRepository;
-      final isSignedIn = await authenticationRepository.isSignedIn;
-      if (isSignedIn) {
-        final user = await authenticationRepository.getUserData();
-        if (mounted) {
-          if (user != null) {
-            //home
-            _goTo(Routes.home);
-          } else {
-            // sign in
-            _goTo(Routes.signin);
-          }
-        }
-      } else if (mounted) {
-        _goTo(Routes.signin);
+      if (!hasInternet) {
+        return Routes.offline;
       }
-    } else {
-      _goTo(Routes.offline);
+      final isSignedIn = await authenticationRepository.isSignedIn;
+      if (!isSignedIn) {
+        return Routes.signin;
+      }
+      final user = await authenticationRepository.getUserData();
+
+      if (user != null) {
+        return Routes.home;
+      } else {
+        return Routes.signin;
+      }
+    }();
+
+    if (mounted) {
+      _goTo(routeName);
     }
   }
 
