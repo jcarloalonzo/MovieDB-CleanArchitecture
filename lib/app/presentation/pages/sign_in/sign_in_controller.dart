@@ -1,3 +1,7 @@
+import '../../../domain/either/either.dart';
+import '../../../domain/enums.dart';
+import '../../../domain/models/user.dart';
+import '../../../domain/repositories/authentication_repository.dart';
 import '../../state_notifier.dart';
 import 'sign_in_state.dart';
 
@@ -5,7 +9,12 @@ import 'sign_in_state.dart';
 //  esto es para que sea amigable con pruebas unitarias
 
 class SignInController extends StateNotifier<SignInState> {
-  SignInController(super.state);
+  SignInController(
+    super.state, {
+    required this.authenticationRepository,
+  });
+
+  final AuthenticationRepository authenticationRepository;
 
   // SignInState _state = SignInState(username: '', password: '', fetching: false);
 
@@ -32,7 +41,16 @@ class SignInController extends StateNotifier<SignInState> {
     );
   }
 
-  void onFetchingChanged(bool value) {
-    state = state.copywith(fetching: value);
+  Future<Either<SignInFailure, User>> submit() async {
+    state = state.copywith(fetching: true);
+
+    final result =
+        await authenticationRepository.signIn(state.username, state.password);
+
+    result.when(
+      (failure) => state = state.copywith(fetching: false),
+      (_) => null,
+    );
+    return result;
   }
 }

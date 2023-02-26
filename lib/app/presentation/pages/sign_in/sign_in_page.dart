@@ -14,7 +14,8 @@ class SignInPage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => SignInController(
 // nos pide pasar el estado inicial
-          const SignInState()
+          const SignInState(),
+          authenticationRepository: context.read<AuthenticationRepository>()
 
           // apiRepositoryInterface: context.read<ApiRepositoryInterface>(),
           // localRepositoryInterface: context.read<LocalRepositoryInterface>(),
@@ -92,25 +93,15 @@ class SignInPage extends StatelessWidget {
   Future _submit(BuildContext context) async {
     final bloc = context.read<SignInController>();
 
-    bloc.onFetchingChanged(true);
-
-    final result = await context
-        .read<AuthenticationRepository>()
-        .signIn(bloc.state.username, bloc.state.password);
-
-    print(result);
 // * VALIDA SI ESTÁ RENDERIZADO
+
+    final result = await bloc.submit();
 
     if (!bloc.mounted) {
       return;
     }
 
-    print(' 😊 MOUNTED === ${context.mounted}');
-
     result.when((failure) {
-      //
-      bloc.onFetchingChanged(false);
-
       final message = {
         SignInFailure.notFound: 'Not Found',
         SignInFailure.unauthorized: 'Invalid Password',
@@ -127,6 +118,5 @@ class SignInPage extends StatelessWidget {
       Navigator.pushReplacementNamed(context, Routes.home);
       //
     });
-    print('FINAL 😊 MOUNTED === ${context.mounted}');
   }
 }
