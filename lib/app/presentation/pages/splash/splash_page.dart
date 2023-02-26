@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
+import '../../../domain/repositories/account_repository.dart';
 import '../../../domain/repositories/authentication_repository.dart';
 import '../../../domain/repositories/connecivity_repository.dart';
 import '../../routes/routes.dart';
@@ -36,18 +37,16 @@ class _SplashPageState extends State<SplashPage> {
     final routeName = await () async {
       final connectivityRepository = context.read<ConnectivityRepository>();
       final authenticationRepository = context.read<AuthenticationRepository>();
+      final accountRepository = context.read<AccountRepository>();
 
+//
       final hasInternet = await connectivityRepository.hasInternet();
-
-      if (!hasInternet) {
-        return Routes.offline;
-      }
+      if (!hasInternet) return Routes.offline;
+      //
       final isSignedIn = await authenticationRepository.isSignedIn;
-      if (!isSignedIn) {
-        return Routes.signin;
-      }
-      final user = await authenticationRepository.getUserData();
+      if (!isSignedIn) return Routes.signin;
 
+      final user = await accountRepository.getUserData();
       if (user != null) {
         return Routes.home;
       } else {
