@@ -5,11 +5,12 @@ import 'package:flutter/foundation.dart';
 
 class SignInController extends ChangeNotifier {
   String _username = '', _password = '';
-  bool _fetching = false;
+  bool _fetching = false, _mounted = true;
 
   String get username => _username;
   String get password => _password;
   bool get fetching => _fetching;
+  bool get mounted => _mounted;
 
   void onUserNameChanged(String text) {
     _username = text.trim();
@@ -22,5 +23,14 @@ class SignInController extends ChangeNotifier {
   void onFetchingChanged(bool value) {
     _fetching = value;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    print('✔ DISPOSE- BLOC----');
+
+    super.dispose();
+    _mounted = false;
   }
 }

@@ -21,7 +21,7 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.watch<SignInController>();
+    print('👀👀 BUILDER');
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -29,6 +29,7 @@ class SignInPage extends StatelessWidget {
           child: Form(
             // *ABSORBPOINTER ES PARA QUE NO SE PUEDA USAR
             child: Builder(builder: (context) {
+              print('😜😜 Fbuilder form ');
               final bloc = context.watch<SignInController>();
 
               return AbsorbPointer(
@@ -96,6 +97,12 @@ class SignInPage extends StatelessWidget {
     print(result);
 // * VALIDA SI ESTÁ RENDERIZADO
 
+    if (!bloc.mounted) {
+      return;
+    }
+
+    print(' 😊 MOUNTED === ${context.mounted}');
+
     result.when((failure) {
       //
       bloc.onFetchingChanged(false);
@@ -116,5 +123,6 @@ class SignInPage extends StatelessWidget {
       Navigator.pushReplacementNamed(context, Routes.home);
       //
     });
+    print('FINAL 😊 MOUNTED === ${context.mounted}');
   }
 }
