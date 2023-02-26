@@ -35,3 +35,11 @@ class SignInController extends ChangeNotifier {
   }
 }
 
+
+class SignInState {
+  SignInState(
+      {required this.username, required this.password, required this.fetching});
+
+  final String username, password;
+  final bool fetching;
+}
