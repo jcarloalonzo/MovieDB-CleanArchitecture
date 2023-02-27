@@ -27,7 +27,7 @@ class SignInController extends StateNotifier<SignInState> {
     //
     // _state = _state.copywith(username: text.trim().toLowerCase());
     onlyUpdate(
-      state.copywith(
+      state.copyWith(
         username: text.trim().toLowerCase(),
       ),
     );
@@ -35,18 +35,18 @@ class SignInController extends StateNotifier<SignInState> {
 
   void onPasswordChanged(String text) {
     onlyUpdate(
-      state.copywith(
+      state.copyWith(
         password: text.replaceAll(' ', ''),
       ),
     );
   }
 
   Future<Either<SignInFailure, User>> submit() async {
-    state = state.copywith(fetching: true);
+    state = state.copyWith(fetching: true);
     final result =
         await authenticationRepository.signIn(state.username, state.password);
     result.when(
-      (failure) => state = state.copywith(fetching: false),
+      (failure) => state = state.copyWith(fetching: false),
       (_) => null,
     );
     return result;
