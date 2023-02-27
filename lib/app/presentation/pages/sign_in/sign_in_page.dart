@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../domain/enums.dart';
+import '../../../domain/failures/sign_in_failure.dart';
 import '../../../domain/repositories/authentication_repository.dart';
 import '../../global/controller/session_controller.dart';
 import '../../routes/routes.dart';
@@ -94,17 +94,32 @@ class SignInPage extends StatelessWidget {
     final result = await bloc.submit();
     if (!bloc.mounted) return;
 
-    result.when((failure) {
-      final message = {
-        SignInFailure.notFound: 'Not Found',
-        SignInFailure.unauthorized: 'Invalid Password',
-        SignInFailure.unknown: 'Error',
-        SignInFailure.network: 'Network error',
-      }[failure];
+    result.when(
+        //
+        (failure) {
+      final message = () {
+        if (failure is NotFound) {
+          return 'Not Found';
+        }
+        if (failure is Unauthorized) {
+          return 'Invalid Password';
+        }
+        if (failure is Network) {
+          return 'Network Error';
+        }
+        return 'Error';
+      }();
+
+      // final message = {
+      //   SignInFailure.notFound: 'Not Found',
+      //   SignInFailure.unauthorized: 'Invalid Password',
+      //   SignInFailure.unknown: 'Error',
+      //   SignInFailure.network: 'Network error',
+      // }[failure];
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(message!),
+          content: Text(message),
         ),
       );
     }, (user) {
