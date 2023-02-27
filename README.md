@@ -24,3 +24,12 @@ dart fix --dry-run # preview of the proposed changes
 dart fix --apply # apply the changes
 
 <!--  -->
+
+# LOCAL DEPLOY
+
+Run
+
+```
+flutter pub get
+flutter pub run build_runner build
+```
