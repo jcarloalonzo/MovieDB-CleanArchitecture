@@ -2,7 +2,7 @@ import '../../../domain/either/either.dart';
 import '../../../domain/enums.dart';
 import '../../../domain/models/user.dart';
 import '../../../domain/repositories/authentication_repository.dart';
-import '../../state_notifier.dart';
+import '../../global/state_notifier.dart';
 import 'sign_in_state.dart';
 
 // * está clase va a notificar a la vista.
@@ -43,10 +43,8 @@ class SignInController extends StateNotifier<SignInState> {
 
   Future<Either<SignInFailure, User>> submit() async {
     state = state.copywith(fetching: true);
-
     final result =
         await authenticationRepository.signIn(state.username, state.password);
-
     result.when(
       (failure) => state = state.copywith(fetching: false),
       (_) => null,

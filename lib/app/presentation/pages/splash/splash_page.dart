@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../../domain/repositories/account_repository.dart';
 import '../../../domain/repositories/authentication_repository.dart';
 import '../../../domain/repositories/connecivity_repository.dart';
+import '../../global/controller/session_controller.dart';
 import '../../routes/routes.dart';
 
 class SplashPage extends StatefulWidget {
@@ -38,6 +39,7 @@ class _SplashPageState extends State<SplashPage> {
       final connectivityRepository = context.read<ConnectivityRepository>();
       final authenticationRepository = context.read<AuthenticationRepository>();
       final accountRepository = context.read<AccountRepository>();
+      final SessionController sessionController = context.read();
 
 //
       final hasInternet = await connectivityRepository.hasInternet();
@@ -47,7 +49,12 @@ class _SplashPageState extends State<SplashPage> {
       if (!isSignedIn) return Routes.signin;
 
       final user = await accountRepository.getUserData();
+
+//
+// * DECLARANDO ESTADO GLOBAL DE USUARIO SI TODO OK..
+
       if (user != null) {
+        sessionController.setUser(user);
         return Routes.home;
       } else {
         return Routes.signin;

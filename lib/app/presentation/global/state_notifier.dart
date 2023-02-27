@@ -32,8 +32,6 @@ abstract class StateNotifier<State> extends ChangeNotifier {
 
   @override
   void dispose() {
-    // TODO: implement dispose
-
     _mounted = false;
     super.dispose();
   }

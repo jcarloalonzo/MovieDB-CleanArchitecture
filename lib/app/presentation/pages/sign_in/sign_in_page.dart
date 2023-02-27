@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../domain/enums.dart';
 import '../../../domain/repositories/authentication_repository.dart';
+import '../../global/controller/session_controller.dart';
 import '../../routes/routes.dart';
 import 'sign_in_controller.dart';
 import 'sign_in_state.dart';
@@ -26,7 +27,6 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('👀👀 BUILDER');
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -34,9 +34,7 @@ class SignInPage extends StatelessWidget {
           child: Form(
             // *ABSORBPOINTER ES PARA QUE NO SE PUEDA USAR
             child: Builder(builder: (context) {
-              print('😜😜 Fbuilder form ');
               final bloc = context.watch<SignInController>();
-
               return AbsorbPointer(
                 absorbing: bloc.state.fetching,
                 child: Column(
@@ -92,14 +90,9 @@ class SignInPage extends StatelessWidget {
 
   Future _submit(BuildContext context) async {
     final bloc = context.read<SignInController>();
-
-// * VALIDA SI ESTÁ RENDERIZADO
-
+    final userBloc = Provider.of<SessionController>(context, listen: false);
     final result = await bloc.submit();
-
-    if (!bloc.mounted) {
-      return;
-    }
+    if (!bloc.mounted) return;
 
     result.when((failure) {
       final message = {
@@ -115,6 +108,8 @@ class SignInPage extends StatelessWidget {
         ),
       );
     }, (user) {
+      userBloc.setUser(user);
+      //
       Navigator.pushReplacementNamed(context, Routes.home);
       //
     });

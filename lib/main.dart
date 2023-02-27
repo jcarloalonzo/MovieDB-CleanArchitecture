@@ -15,6 +15,7 @@ import 'app/data/services/remote/internet_checker.dart';
 import 'app/domain/repositories/account_repository.dart';
 import 'app/domain/repositories/authentication_repository.dart';
 import 'app/domain/repositories/connecivity_repository.dart';
+import 'app/presentation/global/controller/session_controller.dart';
 import 'app/presentation/my_app.dart';
 
 void main() {
@@ -57,6 +58,17 @@ void main() {
             );
           },
         ),
+
+        //
+        //
+
+        ChangeNotifierProvider<SessionController>(
+          create: (context) => SessionController(
+            authenticationRepository: context.read<AuthenticationRepository>(),
+          ),
+        ),
+        //
+        //
       ],
       child: const MyApp(),
     ),
