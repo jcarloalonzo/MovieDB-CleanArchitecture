@@ -1,4 +1,4 @@
-import '../../../domain/models/user.dart';
+import '../../../domain/models/user/user.dart';
 import '../../http/http.dart';
 
 class AccountAPI {
@@ -15,9 +15,12 @@ class AccountAPI {
         'session_id': sessionID,
       },
       onSuccess: (json) {
-        return User(id: json['id'], username: json['username']);
+        // return User(id: json['id'], username: json['username']);
+        return User.fromJson(json);
       },
     );
+
+    print(response);
     return response.when((_) => null, (user) => user);
     //
     //

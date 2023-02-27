@@ -34,23 +34,11 @@ class AuthenticationAPI {
     final result = await _http.request(
       '/authentication/token/new',
       onSuccess: (responseBody) {
-        print(responseBody);
-        // final json = Map<String, dynamic>.from(jsonDecode(responseBody));
         final json = responseBody as Map;
-
-        print(json);
         return json['request_token'] as String;
         // return 'qwe';
       },
     );
-    // final requestToken = result.when((result) {
-    //   return null;
-    // }, (responseBody) {
-    //   final json = Map<String, dynamic>.from(jsonDecode(responseBody));
-    //   return json['request_token'] as String;
-    // });
-    // return requestToken;
-    print(result);
     return result.when(
       (failure) {
         return _handleFailure(failure);
@@ -75,16 +63,10 @@ class AuthenticationAPI {
         'request_token': requestToken,
       },
       onSuccess: (responseBody) {
-        print(responseBody);
-        // final json = Map<String, dynamic>.from(jsonDecode(responseBody));
-        // print(json['request_token'] as String);
         final json = responseBody as Map;
-
         return json['request_token'] as String;
       },
     );
-    print(result);
-
     return result.when(
       // *es lo mismo que lo de arriba
       _handleFailure,
@@ -106,15 +88,12 @@ class AuthenticationAPI {
         'request_token': requestToken,
       },
       onSuccess: (responseBody) {
-        print(responseBody);
         // final json = Map<String, dynamic>.from(jsonDecode(responseBody));
         final json = responseBody as Map;
-
         return json['session_id'] as String;
       },
     );
 
-    print(result);
     return result.when((failure) {
       return _handleFailure(failure);
     }, (sessionId) {

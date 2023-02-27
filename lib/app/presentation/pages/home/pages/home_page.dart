@@ -17,6 +17,9 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              if (user?.avatarPath != null)
+                Image.network(
+                    'https://image.tmdb.org/t/p/w500//${user?.avatarPath}'),
               Text(user?.id.toString() ?? ''),
               Text(user?.username ?? ''),
               TextButton(
