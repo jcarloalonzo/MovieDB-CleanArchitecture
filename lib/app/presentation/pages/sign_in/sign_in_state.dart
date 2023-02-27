@@ -4,12 +4,22 @@ part 'sign_in_state.freezed.dart';
 
 @freezed
 class SignInState with _$SignInState {
-  factory SignInState({
-    required String username,
-    required String password,
-    required bool fetching,
+  const factory SignInState({
+    @Default('') String username,
+    @Default('') String password,
+    @Default(false) bool fetching,
   }) = _SignInState;
 }
+
+
+// @freezed
+// class SignInState with _$SignInState {
+//   factory SignInState({
+//     required String username,
+//     required String password,
+//     required bool fetching,
+//   }) = _SignInState;
+// }
 
 
 

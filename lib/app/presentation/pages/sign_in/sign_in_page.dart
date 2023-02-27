@@ -15,7 +15,7 @@ class SignInPage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => SignInController(
 // nos pide pasar el estado inicial
-          SignInState(fetching: false, password: '', username: ''),
+          const SignInState(),
           authenticationRepository: context.read<AuthenticationRepository>()
 
           // apiRepositoryInterface: context.read<ApiRepositoryInterface>(),

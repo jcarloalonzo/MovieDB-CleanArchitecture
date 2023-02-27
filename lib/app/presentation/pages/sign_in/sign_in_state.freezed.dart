@@ -114,14 +114,17 @@ class __$$_SignInStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_SignInState implements _SignInState {
-  _$_SignInState(
-      {required this.username, required this.password, required this.fetching});
+  const _$_SignInState(
+      {this.username = '', this.password = '', this.fetching = false});
 
   @override
+  @JsonKey()
   final String username;
   @override
+  @JsonKey()
   final String password;
   @override
+  @JsonKey()
   final bool fetching;
 
   @override
@@ -153,10 +156,10 @@ class _$_SignInState implements _SignInState {
 }
 
 abstract class _SignInState implements SignInState {
-  factory _SignInState(
-      {required final String username,
-      required final String password,
-      required final bool fetching}) = _$_SignInState;
+  const factory _SignInState(
+      {final String username,
+      final String password,
+      final bool fetching}) = _$_SignInState;
 
   @override
   String get username;
