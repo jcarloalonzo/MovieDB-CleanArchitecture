@@ -1,5 +1,5 @@
 import '../../../domain/either/either.dart';
-import '../../../domain/failures/sign_in_failure.dart';
+import '../../../domain/failures/sign_in/sign_in_failure.dart';
 import '../../http/http.dart';
 
 class AuthenticationAPI {

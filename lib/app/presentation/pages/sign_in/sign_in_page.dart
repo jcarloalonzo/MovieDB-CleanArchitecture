@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../domain/failures/sign_in_failure.dart';
+import '../../../domain/failures/sign_in/sign_in_failure.dart';
 import '../../../domain/repositories/authentication_repository.dart';
 import '../../global/controller/session_controller.dart';
 import '../../routes/routes.dart';
