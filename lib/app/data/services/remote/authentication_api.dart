@@ -11,22 +11,22 @@ class AuthenticationAPI {
     if (failure.statusCode != null) {
       switch (failure.statusCode) {
         case 401:
-          return Either.left(Unauthorized());
+          return Either.left(SignInFailureUnauthorized());
         case 404:
-          return Either.left(NotFound());
+          return Either.left(SignInFailureNotFound());
         default:
-          return Either.left(Unknown());
+          return Either.left(SignInFailureUnknown());
       }
     }
 
     if (failure.exception is NetworkException) {
       return Either.left(
-        Network(),
+        SignInFailureNetwork(),
       );
     }
 
     return Either.left(
-      Unknown(),
+      SignInFailureUnknown(),
     );
   }
 
@@ -39,11 +39,12 @@ class AuthenticationAPI {
         // return 'qwe';
       },
     );
+
     return result.when(
-      (failure) {
+      left: (failure) {
         return _handleFailure(failure);
       },
-      (requestToken) {
+      right: (requestToken) {
         return Either.right(requestToken);
       },
     );
@@ -69,8 +70,10 @@ class AuthenticationAPI {
     );
     return result.when(
       // *es lo mismo que lo de arriba
-      _handleFailure,
-      (requestToken) {
+      left: (failure) {
+        return _handleFailure(failure);
+      },
+      right: (requestToken) {
         return Either.right(requestToken);
       },
     );
@@ -93,11 +96,13 @@ class AuthenticationAPI {
         return json['session_id'] as String;
       },
     );
-
-    return result.when((failure) {
-      return _handleFailure(failure);
-    }, (sessionId) {
-      return Either.right(sessionId);
-    });
+    return result.when(
+      left: (failure) {
+        return _handleFailure(failure);
+      },
+      right: (sessionId) {
+        return Either.right(sessionId);
+      },
+    );
   }
 }

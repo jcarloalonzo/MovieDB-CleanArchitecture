@@ -21,7 +21,8 @@ class AccountAPI {
     );
 
     print(response);
-    return response.when((_) => null, (user) => user);
+
+    return response.when(left: (failure) => null, right: (user) => user);
     //
     //
     //

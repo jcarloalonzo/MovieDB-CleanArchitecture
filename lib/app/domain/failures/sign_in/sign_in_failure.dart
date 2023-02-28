@@ -4,10 +4,10 @@ part 'sign_in_failure.freezed.dart';
 
 @freezed
 class SignInFailure with _$SignInFailure {
-  factory SignInFailure.network() = Network;
-  factory SignInFailure.notFound() = NotFound;
-  factory SignInFailure.unauthorized() = Unauthorized;
-  factory SignInFailure.unknow() = Unknown;
+  factory SignInFailure.network() = SignInFailureNetwork;
+  factory SignInFailure.notFound() = SignInFailureNotFound;
+  factory SignInFailure.unauthorized() = SignInFailureUnauthorized;
+  factory SignInFailure.unknow() = SignInFailureUnknown;
 }
 
 

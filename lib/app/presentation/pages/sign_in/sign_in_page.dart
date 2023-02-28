@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../domain/failures/sign_in/sign_in_failure.dart';
 import '../../../domain/repositories/authentication_repository.dart';
 import '../../global/controller/session_controller.dart';
 import '../../routes/routes.dart';
@@ -95,38 +94,48 @@ class SignInPage extends StatelessWidget {
     if (!bloc.mounted) return;
 
     result.when(
+      left: (failure) {
+        final message = failure.when(
+            network: () => 'Network Error',
+            notFound: () => 'Not found',
+            unauthorized: () => 'Unauthorized',
+            unknow: () => 'Error');
+
+        // ! se reemplaza con freezed funcional
+        // result.when(
+        //     //
+        //     (failure) {
+        //   final message = () {
+        //     if (failure is NotFound) {
+        //       return 'Not Found';
+        //     }
+        //     if (failure is Unauthorized) {
+        //       return 'Invalid Password';
+        //     }
+        //     if (failure is Network) {
+        //       return 'Network Error';
+        //     }
+        //     return 'Error';
+        //   }();
+
+        // final message = {
+        //   SignInFailure.notFound: 'Not Found',
+        //   SignInFailure.unauthorized: 'Invalid Password',
+        //   SignInFailure.unknown: 'Error',
+        //   SignInFailure.network: 'Network error',
+        // }[failure];
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+          ),
+        );
+      },
+      right: (user) {
+        userBloc.setUser(user);
         //
-        (failure) {
-      final message = () {
-        if (failure is NotFound) {
-          return 'Not Found';
-        }
-        if (failure is Unauthorized) {
-          return 'Invalid Password';
-        }
-        if (failure is Network) {
-          return 'Network Error';
-        }
-        return 'Error';
-      }();
-
-      // final message = {
-      //   SignInFailure.notFound: 'Not Found',
-      //   SignInFailure.unauthorized: 'Invalid Password',
-      //   SignInFailure.unknown: 'Error',
-      //   SignInFailure.network: 'Network error',
-      // }[failure];
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-        ),
-      );
-    }, (user) {
-      userBloc.setUser(user);
-      //
-      Navigator.pushReplacementNamed(context, Routes.home);
-      //
-    });
+        Navigator.pushReplacementNamed(context, Routes.home);
+      },
+    );
   }
 }

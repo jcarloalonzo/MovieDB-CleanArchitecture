@@ -45,9 +45,16 @@ class SignInController extends StateNotifier<SignInState> {
     state = state.copyWith(fetching: true);
     final result =
         await authenticationRepository.signIn(state.username, state.password);
+
     result.when(
-      (failure) => state = state.copyWith(fetching: false),
-      (_) => null,
+      left: (failure) {
+        //
+        return state = state.copyWith(fetching: false);
+      },
+      right: (_) {
+        //
+        return null;
+      },
     );
     return result;
   }
