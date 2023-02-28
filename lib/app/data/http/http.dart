@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 
 import '../../domain/either/either.dart';
+import 'failure.dart';
 
 class Http {
   // client es publico asi que asignamops
@@ -115,6 +116,7 @@ class Http {
       return Either.left(
         HttpFailure(
           statusCode: statusCode,
+          data: responseBody,
         ),
       );
     } catch (e, s) {
@@ -160,17 +162,6 @@ ${(const JsonEncoder.withIndent(' ').convert(logs))}
     }
   }
 }
-
-enum HttpMethod { get, post, patch, delete, put }
-
-class HttpFailure {
-  HttpFailure({this.statusCode, this.exception});
-
-  final int? statusCode;
-  final Object? exception;
-}
-
-class NetworkException {}
 
 dynamic _parseResponseBody(String responseBody) {
   try {

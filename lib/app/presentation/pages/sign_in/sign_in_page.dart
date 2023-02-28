@@ -96,10 +96,12 @@ class SignInPage extends StatelessWidget {
     result.when(
       left: (failure) {
         final message = failure.when(
-            network: () => 'Network Error',
-            notFound: () => 'Not found',
-            unauthorized: () => 'Unauthorized',
-            unknow: () => 'Error');
+          network: () => 'Network Error',
+          notFound: () => 'Not found',
+          unauthorized: () => 'Unauthorized',
+          unknow: () => 'Error',
+          notVerified: () => 'Email not verifies',
+        );
 
         // ! se reemplaza con freezed funcional
         // result.when(
