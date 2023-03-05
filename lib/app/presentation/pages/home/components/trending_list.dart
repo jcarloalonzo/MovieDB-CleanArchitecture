@@ -8,10 +8,27 @@ import '../../../../domain/models/media/media.dart';
 import '../../../../domain/repositories/trending_repository.dart';
 import 'trending_tile.dart';
 
-class TrendingList extends StatelessWidget {
+class TrendingList extends StatefulWidget {
   const TrendingList({super.key});
 
+  @override
+  State<TrendingList> createState() => _TrendingListState();
+}
+
+class _TrendingListState extends State<TrendingList> {
+  late Future<Either<HttpRequestFailure, List<Media>>> _future;
+  TimeWindow _timeWindow = TimeWindow.day;
+
+  TrendingRepository get _repository => context.read<TrendingRepository>();
   //
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final TrendingRepository repository = context.read();
+    _future = repository.getMoviesAndSeries(_timeWindow);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +37,41 @@ class TrendingList extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.all(20.0),
-          child: Text(
-            'TRENDING',
-            style: TextStyle(fontWeight: FontWeight.bold),
+        Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Row(
+            children: [
+              const Text(
+                'TRENDING',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const Spacer(),
+              DropdownButton<TimeWindow>(
+                value: _timeWindow,
+                items: const [
+                  DropdownMenuItem(
+                    value: TimeWindow.day,
+                    child: Text('Last 24h'),
+                  ),
+                  DropdownMenuItem(
+                    value: TimeWindow.week,
+                    child: Text('Last week'),
+                  ),
+                ],
+                onChanged: (timeWindow) {
+                  if (timeWindow != null) {
+                    setState(() {
+                      _timeWindow = timeWindow;
+                      _future = _repository.getMoviesAndSeries(_timeWindow);
+                    });
+                  }
+                },
+              )
+            ],
           ),
         ),
+
+        // https://www.udemy.com/course/flutter-desde-cero-darwin-morocho/learn/lecture/35170188#questions
         const SizedBox(height: 10),
         AspectRatio(
           aspectRatio: 16 / 8,
@@ -35,7 +80,10 @@ class TrendingList extends StatelessWidget {
               final width = constraints.maxHeight * 0.75;
               return Center(
                 child: FutureBuilder<Either<HttpRequestFailure, List<Media>>>(
-                  future: bloc.getMoviesAndSeries(TimeWindow.day),
+                  key: ValueKey(_future),
+                  // future: bloc.getMoviesAndSeries(TimeWindow.day),
+                  future: _future,
+
                   builder: (_, snapshot) {
                     // if (snapshot.connectionState == ConnectionState.waiting) {
                     //   return const Center(child: CircularProgressIndicator());
