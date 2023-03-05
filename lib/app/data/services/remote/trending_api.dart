@@ -16,18 +16,43 @@ class TrendingAPI {
       '/trending/all/${timeWindow.name}',
       onSuccess: (json) {
         //
-        final list = json['result'] as List<Map<String, dynamic>>;
+        print(json);
+        print(json.runtimeType);
 
-        return list
+        // var a = (json['results'] as List)
+        //     .
+        //     //
+        //     map((e) => Media.fromJson(e))
+        //     .toList();
+
+        var s = List<Map<String, dynamic>>.from(json['results']);
+
+        final list = s
             .where((e) => e['media_type'] != 'person')
             .map((e) => Media.fromJson(e))
             .toList();
+
+        return list;
+        // final list = json['results'] as List<Map<String, dynamic>>;
+        // final list = List<Map<String, dynamic>>.from(json['results']);
+
+        // print(list);
+        // return list
+        //     .where((e) => e['media_type'] != 'person')
+        //     .map((e) => Media.fromJson(e))
+        //     .toList();
+
+        // final x = MediaResponse.fromJson(json);
+        // print(x);
+
+        // return x.results;
       },
     );
 
     return response.when(
         left: (httpFailure) => handleHttpFailure(httpFailure),
         right: (list) {
+          // return Either.right(list);
           return Either.right(list);
         });
   }

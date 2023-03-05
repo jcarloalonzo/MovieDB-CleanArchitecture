@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -127,7 +126,7 @@ class Http {
       // SocketException , pertenece al paquete dart:io lo que significa que no es compatible en web
       logs = {
         ...logs,
-        'exception': e.runtimeType,
+        'exception': e.runtimeType.toString(),
       };
       if (e is SocketException || e is ClientException) {
         logs = {
@@ -151,13 +150,17 @@ class Http {
           ...logs,
           'endTime': DateTime.now().toString(),
         };
-        log('''
-🔥
------------------------------------------------------------------
-${(const JsonEncoder.withIndent(' ').convert(logs))}
------------------------------------------------------------------
-🔥
-''', stackTrace: stackTrace);
+
+//         log(
+//           '''
+// 🔥
+// -----------------------------------------------------------------
+// ${(const JsonEncoder.withIndent(' ').convert(logs))}
+// -----------------------------------------------------------------
+// 🔥
+// ''',
+//           stackTrace: stackTrace,
+//         );
       }
     }
   }

@@ -7,14 +7,17 @@ import 'package:provider/provider.dart';
 import 'app/data/datasource/account_repository_impl.dart';
 import 'app/data/datasource/authentication_repository_impl.dart';
 import 'app/data/datasource/connectivity_repository_impl.dart';
+import 'app/data/datasource/trending_repository_impl.dart';
 import 'app/data/http/http.dart';
 import 'app/data/services/local/session_service.dart';
 import 'app/data/services/remote/account_api.dart';
 import 'app/data/services/remote/authentication_api.dart';
 import 'app/data/services/remote/internet_checker.dart';
+import 'app/data/services/remote/trending_api.dart';
 import 'app/domain/repositories/account_repository.dart';
 import 'app/domain/repositories/authentication_repository.dart';
 import 'app/domain/repositories/connecivity_repository.dart';
+import 'app/domain/repositories/trending_repository.dart';
 import 'app/presentation/global/controller/session_controller.dart';
 import 'app/presentation/my_app.dart';
 
@@ -59,6 +62,14 @@ void main() {
           },
         ),
 
+        //
+        //
+
+        Provider<TrendingRepository>(
+          create: (_) => TrendingRepositoryImpl(
+            TrendingAPI(http),
+          ),
+        ),
         //
         //
 
