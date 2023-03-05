@@ -25,14 +25,19 @@ class TrendingAPI {
         //     map((e) => Media.fromJson(e))
         //     .toList();
 
-        var s = List<Map<String, dynamic>>.from(json['results']);
+        var list = List<Map<String, dynamic>>.from(json['results']);
 
-        final list = s
-            .where((e) => e['media_type'] != 'person')
-            .map((e) => Media.fromJson(e))
-            .toList();
+        return getMediaList(list);
 
-        return list;
+        // final list = s
+        //     .where((e) =>
+        //         e['media_type'] != 'person' &&
+        //         e['poster_path'] != null &&
+        //         e['backdrop_path'])
+        //     .map((e) => Media.fromJson(e))
+        //     .toList();
+
+        // return list;
         // final list = json['results'] as List<Map<String, dynamic>>;
         // final list = List<Map<String, dynamic>>.from(json['results']);
 

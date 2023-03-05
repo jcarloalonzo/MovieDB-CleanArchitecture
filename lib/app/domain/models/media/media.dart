@@ -42,3 +42,13 @@ enum MediaType {
   @JsonValue('tv')
   tv,
 }
+
+List<Media> getMediaList(List<Map<String, dynamic>> list) {
+  return list
+      .where((e) =>
+          e['media_type'] != 'person' &&
+          e['poster_path'] != null &&
+          e['backdrop_path'])
+      .map((e) => Media.fromJson(e))
+      .toList();
+}
