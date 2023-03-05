@@ -15,6 +15,7 @@ class HomePage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: const [
+            SizedBox(height: 10),
             TrendingList(),
           ],
         ),

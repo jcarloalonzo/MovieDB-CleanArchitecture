@@ -7,6 +7,7 @@ import '../../../../domain/failures/http_request/http_request_failure.dart';
 import '../../../../domain/models/media/media.dart';
 import '../../../../domain/repositories/trending_repository.dart';
 import 'trending_tile.dart';
+import 'trending_time_window.dart';
 
 class TrendingList extends StatefulWidget {
   const TrendingList({super.key});
@@ -17,7 +18,7 @@ class TrendingList extends StatefulWidget {
 
 class _TrendingListState extends State<TrendingList> {
   late Future<Either<HttpRequestFailure, List<Media>>> _future;
-  TimeWindow _timeWindow = TimeWindow.day;
+  final TimeWindow _timeWindow = TimeWindow.day;
 
   TrendingRepository get _repository => context.read<TrendingRepository>();
   //
@@ -37,39 +38,14 @@ class _TrendingListState extends State<TrendingList> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Row(
-            children: [
-              const Text(
-                'TRENDING',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const Spacer(),
-              DropdownButton<TimeWindow>(
-                value: _timeWindow,
-                items: const [
-                  DropdownMenuItem(
-                    value: TimeWindow.day,
-                    child: Text('Last 24h'),
-                  ),
-                  DropdownMenuItem(
-                    value: TimeWindow.week,
-                    child: Text('Last week'),
-                  ),
-                ],
-                onChanged: (timeWindow) {
-                  if (timeWindow != null) {
-                    setState(() {
-                      _timeWindow = timeWindow;
-                      _future = _repository.getMoviesAndSeries(_timeWindow);
-                    });
-                  }
-                },
-              )
-            ],
-          ),
-        ),
+        TrendingTimeWindow(
+            timeWindow: _timeWindow,
+            onChanged: (timeWindow) {
+              setState(() {
+                timeWindow = timeWindow;
+                _future = _repository.getMoviesAndSeries(timeWindow);
+              });
+            }),
 
         // https://www.udemy.com/course/flutter-desde-cero-darwin-morocho/learn/lecture/35170188#questions
         const SizedBox(height: 10),
@@ -103,6 +79,7 @@ class _TrendingListState extends State<TrendingList> {
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
                             final media = list[index];
+
                             return TrendingTile(
                               media: media,
                               width: width,

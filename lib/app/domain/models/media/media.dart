@@ -18,7 +18,8 @@ class Media with _$Media {
     @JsonKey(name: 'original_name') String? originalName,
     String? overview,
     @JsonKey(name: 'poster_path') String? posterPath,
-    @JsonKey(name: 'media_type') String? mediaType,
+    // @JsonKey(name: 'media_type') String? mediaType,
+    @JsonKey(name: 'media_type') MediaType? mediaType,
     @JsonKey(name: 'genre_ids') List<int>? genreIds,
     double? popularity,
     @JsonKey(name: 'first_air_date') DateTime? firstAirDate,
@@ -32,4 +33,12 @@ class Media with _$Media {
   }) = _Media;
 
   factory Media.fromJson(Map<String, dynamic> json) => _$MediaFromJson(json);
+}
+
+// en ves de trabjar con string mejor trabajamos con enums para evitar errores de tipografia y comparaciones
+enum MediaType {
+  @JsonValue('movie')
+  movie,
+  @JsonValue('tv')
+  tv,
 }
