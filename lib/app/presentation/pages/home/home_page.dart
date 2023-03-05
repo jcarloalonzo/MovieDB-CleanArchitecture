@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../global/controller/session_controller.dart';
+import 'components/trending_actor.dart';
 import 'components/trending_list.dart';
 
 class HomePage extends StatelessWidget {
@@ -17,6 +18,8 @@ class HomePage extends StatelessWidget {
           children: const [
             SizedBox(height: 10),
             TrendingList(),
+            SizedBox(height: 10),
+            TrendingActor(),
           ],
         ),
       ),

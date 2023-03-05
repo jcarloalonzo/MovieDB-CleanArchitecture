@@ -20,7 +20,8 @@ class Actors with _$Actors {
     int? gender,
     @JsonKey(name: 'known_for_department') String? knownForDepartment,
     @JsonKey(name: 'profile_path') String? profilePath,
-    @JsonKey(name: 'know_for', fromJson: getMediaList) List<Media>? knownFor,
+    @JsonKey(name: 'known_for', fromJson: getMediaList)
+        required List<Media> knownFor,
   }) = _Actors;
 
   factory Actors.fromJson(Map<String, dynamic> json) => _$ActorsFromJson(json);
