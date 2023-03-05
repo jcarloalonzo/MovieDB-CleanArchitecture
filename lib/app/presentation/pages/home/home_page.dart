@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../global/controller/session_controller.dart';
-import 'components/trending_actor.dart';
-import 'components/trending_list.dart';
+import 'components/actor/trending_actor.dart';
+import 'components/movies/trending_list.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

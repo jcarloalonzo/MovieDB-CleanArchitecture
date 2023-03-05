@@ -18,7 +18,7 @@ class TrendingRepositoryImpl implements TrendingRepository {
   }
 
   @override
-  Future<Either<HttpRequestFailure, List<Actors>>> getActors() async {
+  Future<Either<HttpRequestFailure, List<Actor>>> getActors() async {
     return _trendingAPI.getActors(TimeWindow.day);
   }
 }

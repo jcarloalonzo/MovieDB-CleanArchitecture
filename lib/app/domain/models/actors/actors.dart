@@ -10,8 +10,8 @@ part 'actors.freezed.dart';
 part 'actors.g.dart';
 
 @freezed
-class Actors with _$Actors {
-  const factory Actors({
+class Actor with _$Actor {
+  const factory Actor({
     bool? adult,
     int? id,
     String? name,
@@ -24,5 +24,5 @@ class Actors with _$Actors {
         required List<Media> knownFor,
   }) = _Actors;
 
-  factory Actors.fromJson(Map<String, dynamic> json) => _$ActorsFromJson(json);
+  factory Actor.fromJson(Map<String, dynamic> json) => _$ActorFromJson(json);
 }

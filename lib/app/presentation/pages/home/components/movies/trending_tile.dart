@@ -1,8 +1,8 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../domain/models/media/media.dart';
-import '../../../utils/get_image_url.dart';
+import '../../../../../domain/models/media/media.dart';
+import '../../../../utils/get_image_url.dart';
 
 class TrendingTile extends StatelessWidget {
   const TrendingTile({super.key, required this.media, required this.width});

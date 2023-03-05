@@ -65,7 +65,7 @@ class TrendingAPI {
         });
   }
 
-  Future<Either<HttpRequestFailure, List<Actors>>> getActors(
+  Future<Either<HttpRequestFailure, List<Actor>>> getActors(
       TimeWindow timeWindow) async {
     final response = await _http.request(
       '/trending/person/${timeWindow.name}',
@@ -84,7 +84,7 @@ class TrendingAPI {
             .where((e) =>
                 e['known_for_department'] == 'Acting' &&
                 e['profile_path'] != null)
-            .map((e) => Actors.fromJson(e))
+            .map((e) => Actor.fromJson(e))
             .toList();
         print(x);
         return x;
