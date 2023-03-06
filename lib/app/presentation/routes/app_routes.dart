@@ -10,7 +10,7 @@ class MyRoutes {
   static Map<String, WidgetBuilder> listRoutes = {
     Routes.splash: (context) => const SplashPage(),
     Routes.signin: (context) => SignInPage.init(context),
-    Routes.home: (context) => const HomePage(),
+    Routes.home: (context) => HomePage.init(context),
     Routes.offline: (context) => const OffLinePage(),
   };
 }

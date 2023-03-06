@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../domain/repositories/trending_repository.dart';
 import '../../global/controller/session_controller.dart';
 import 'components/actor/trending_actor.dart';
 import 'components/movies/trending_list.dart';
+import 'home_controller.dart';
+import 'home_state.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  const HomePage._();
+
+  static Widget init(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => HomeController(
+        HomeState(loading: true),
+        trendingRepository: context.read<TrendingRepository>(),
+      )..init(),
+      builder: (_, __) => const HomePage._(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
