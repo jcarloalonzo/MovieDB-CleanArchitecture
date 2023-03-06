@@ -25,14 +25,14 @@ class _TrendingActorState extends State<TrendingActor> {
   @override
   Widget build(BuildContext context) {
     final bloc = context.watch<HomeController>();
-    final state = bloc.state;
+    final state = bloc.state.actors;
     return Expanded(
-      child: state.when(loading: (_) {
+      child: state.when(loading: () {
         return const Center(child: CircularProgressIndicator());
         //
-      }, failed: (_) {
+      }, failed: () {
         return RequestFailed(onRetry: () {});
-      }, loaded: (_, __, actors) {
+      }, loaded: (actors) {
         //
 
         return Stack(

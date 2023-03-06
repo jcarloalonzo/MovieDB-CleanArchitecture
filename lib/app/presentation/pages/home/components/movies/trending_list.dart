@@ -12,12 +12,12 @@ class TrendingList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = context.watch<HomeController>();
-    final state = bloc.state;
+    final state = bloc.state.moviesState;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TrendingTimeWindow(
-          timeWindow: bloc.state.timeWindow,
+          timeWindow: state.timeWindow,
           onChanged: (timeWindow) {
             //
           },
@@ -40,7 +40,7 @@ class TrendingList extends StatelessWidget {
                       },
                     );
                   },
-                  loaded: (_, list, __) {
+                  loaded: (_, list) {
                     return ListView.separated(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       scrollDirection: Axis.horizontal,
