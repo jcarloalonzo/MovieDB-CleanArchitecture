@@ -22,7 +22,10 @@ class RequestFailed extends StatelessWidget {
           //   width: 100,
           //   height: 100,
           // ),
-          Expanded(child: Assets.png.error404.image()),
+          // Expanded(child: Assets.png.error404.image()),
+
+          Expanded(child: Assets.svg.error404.svg()),
+
           Text(text ?? 'Request Failed'),
           MaterialButton(
             onPressed: onRetry,
