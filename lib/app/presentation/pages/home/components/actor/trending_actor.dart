@@ -24,7 +24,8 @@ class _TrendingActorState extends State<TrendingActor> {
     // TODO: implement initState
     super.initState();
     // _pageController = PageController(viewportFraction: 0.8, initialPage: 1);
-    _pageController = PageController(initialPage: 1);
+    // _pageController = PageController(initialPage: 1);
+    _pageController = PageController();
 
     // _pageController.addListener(() {
     //   _currentCard = _pageController.page!.toInt();
@@ -62,31 +63,45 @@ class _TrendingActorState extends State<TrendingActor> {
             left: (failure) {
               return const Text('error');
             },
-            right: (actors) => Column(
+            right: (actors) => Stack(
+              alignment: Alignment.bottomCenter,
               children: [
-                Expanded(
-                  child: PageView.builder(
-                    controller: _pageController,
-                    // *PADENDS PARA ALINEAR A LA IZQUIERDA
-                    padEnds: false,
-                    itemBuilder: (context, index) {
-                      final actor = actors[index];
-                      return ActorTile(
-                        actor: actor,
-                      );
-                    },
-                    scrollDirection: Axis.horizontal,
-                    itemCount: actors.length,
-                  ),
+                PageView.builder(
+                  controller: _pageController,
+                  // *PADENDS PARA ALINEAR A LA IZQUIERDA
+                  padEnds: false,
+                  itemBuilder: (context, index) {
+                    final actor = actors[index];
+                    return ActorTile(
+                      actor: actor,
+                    );
+                  },
+                  scrollDirection: Axis.horizontal,
+                  itemCount: actors.length,
                 ),
                 // Text('${_currentCard + 1}/${actors.length}'),
 
-                AnimatedBuilder(
-                  animation: _pageController,
-                  builder: (_, __) {
-                    final int currentCard = _pageController.page?.toInt() ?? 1;
-                    return Text('${currentCard + 1}/${actors.length}');
-                  },
+                Positioned(
+                  bottom: 30,
+                  child: AnimatedBuilder(
+                    animation: _pageController,
+                    builder: (_, __) {
+                      final int currentCard =
+                          _pageController.page?.toInt() ?? 0;
+                      return Row(
+                        children: List.generate(
+                          actors.length,
+                          (index) => Icon(
+                            Icons.circle,
+                            size: 14,
+                            color: currentCard == index
+                                ? Colors.blue
+                                : Colors.white,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
 
                 const SizedBox(height: 15),

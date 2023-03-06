@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../domain/models/actors/actors.dart';
 import '../../../../utils/get_image_url.dart';
+import '../movies/trending_tile.dart';
 
 class ActorTile extends StatelessWidget {
   const ActorTile({super.key, required this.actor});
@@ -28,7 +29,9 @@ class ActorTile extends StatelessWidget {
               left: 0,
               right: 0,
               child: Container(
-                padding: const EdgeInsets.all(15),
+                padding: const EdgeInsets.all(15).copyWith(
+                  bottom: 40,
+                ),
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     end: Alignment.bottomCenter,
@@ -48,6 +51,42 @@ class ActorTile extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    const SizedBox(height: 10),
+                    if (actor.knownFor.isNotEmpty)
+                      // SizedBox(
+                      //   height: 110,
+                      //   child: ListView.separated(
+                      //     separatorBuilder: (_, __) {
+                      //       return const SizedBox(width: 15);
+                      //     },
+                      //     scrollDirection: Axis.horizontal,
+                      //     itemBuilder: (_, index) {
+                      //       final media = actor.knownFor[index];
+                      //       return TrendingTile(
+                      //         media: media,
+                      //         width: 120 * 0.75,
+                      //         showData: false,
+                      //       );
+                      //     },
+                      //     itemCount: actor.knownFor.length,
+                      //   ),
+                      // )
+                      SizedBox(
+                        height: 110,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: actor.knownFor
+                              .take(3)
+                              .map(
+                                (media) => TrendingTile(
+                                  media: media,
+                                  width: 120 * 0.75,
+                                  showData: false,
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      )
 
                     //
                   ],

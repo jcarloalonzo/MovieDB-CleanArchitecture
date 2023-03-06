@@ -5,9 +5,14 @@ import '../../../../../domain/models/media/media.dart';
 import '../../../../utils/get_image_url.dart';
 
 class TrendingTile extends StatelessWidget {
-  const TrendingTile({super.key, required this.media, required this.width});
+  const TrendingTile(
+      {super.key,
+      required this.media,
+      required this.width,
+      this.showData = true});
   final Media media;
   final double width;
+  final bool showData;
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -30,34 +35,35 @@ class TrendingTile extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            Positioned(
-              right: 5,
-              top: 5,
-              child: Opacity(
-                opacity: 0.8,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Chip(
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      label: Text(
-                        media.voteAverage!.toStringAsFixed(1),
+            if (showData)
+              Positioned(
+                right: 5,
+                top: 5,
+                child: Opacity(
+                  opacity: 0.8,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Chip(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        label: Text(
+                          media.voteAverage!.toStringAsFixed(1),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 5),
-                    Chip(
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      label: Icon(
-                        media.mediaType == MediaType.movie
-                            ? Icons.movie
-                            : Icons.tv,
-                        size: 15,
+                      const SizedBox(height: 5),
+                      Chip(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        label: Icon(
+                          media.mediaType == MediaType.movie
+                              ? Icons.movie
+                              : Icons.tv,
+                          size: 15,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),
