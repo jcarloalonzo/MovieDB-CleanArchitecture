@@ -26,7 +26,7 @@ class TrendingAPI {
         //     map((e) => Media.fromJson(e))
         //     .toList();
 
-        var list = List<Map<String, dynamic>>.from(json['resultsx']);
+        var list = List<Map<String, dynamic>>.from(json['results']);
 
         var s = getMediaList(list);
         // return getMediaList(list);
@@ -78,7 +78,7 @@ class TrendingAPI {
         //     map((e) => Media.fromJson(e))
         //     .toList();
 
-        var list = List<Map<String, dynamic>>.from(json['resultsx']);
+        var list = List<Map<String, dynamic>>.from(json['results']);
 
         final x = list
             .where((e) =>

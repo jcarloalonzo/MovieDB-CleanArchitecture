@@ -12,15 +12,38 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final SessionController sessionController = context.read();
     final user = sessionController.state;
+
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: const [
-            SizedBox(height: 10),
-            TrendingList(),
-            SizedBox(height: 10),
-            TrendingActor(),
-          ],
+        child: LayoutBuilder(
+          builder: (_, contraints) {
+            //
+            return RefreshIndicator(
+              //
+              //
+              onRefresh: () async {
+                //
+              },
+
+              //
+              //
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  // * OBTENIENDO LA MAXIMA ALTURA DEL WIDGET HIJO
+                  height: contraints.maxHeight,
+                  child: Column(
+                    children: const [
+                      SizedBox(height: 10),
+                      TrendingList(),
+                      SizedBox(height: 10),
+                      TrendingActor(),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
