@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../domain/enums.dart';
+import '../../../domain/models/actors/actors.dart';
 import '../../../domain/models/media/media.dart';
 
 part 'home_state.freezed.dart';
@@ -11,8 +12,9 @@ class HomeState with _$HomeState {
       HomeStateLoading;
   factory HomeState.failed({required TimeWindow timeWindow}) = HomeStateFailed;
   factory HomeState.loaded({
-    required List<Media> movies,
     required TimeWindow timeWindow,
+    required List<Media> movies,
+    required List<Actor> actors,
   }) = HomeStateLoaded;
 }
 

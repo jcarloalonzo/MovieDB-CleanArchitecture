@@ -17,8 +17,6 @@ class TrendingAPI {
       '/trending/all/${timeWindow.name}',
       onSuccess: (json) {
         //
-        print(json);
-        print(json.runtimeType);
 
         // var a = (json['results'] as List)
         //     .
@@ -86,7 +84,6 @@ class TrendingAPI {
                 e['profile_path'] != null)
             .map((e) => Actor.fromJson(e))
             .toList();
-        print(x);
         return x;
 
         // final list = s

@@ -40,7 +40,7 @@ class TrendingList extends StatelessWidget {
                       },
                     );
                   },
-                  loaded: (list, _) {
+                  loaded: (_, list, __) {
                     return ListView.separated(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       scrollDirection: Axis.horizontal,

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../domain/either/either.dart';
-import '../../../../../domain/failures/http_request/http_request_failure.dart';
-import '../../../../../domain/models/actors/actors.dart';
-import '../../../../../domain/repositories/trending_repository.dart';
 import '../../../../global/widgets/request_failed.dart';
+import '../../home_controller.dart';
 import 'actor_tile.dart';
 
 class TrendingActor extends StatefulWidget {
@@ -16,25 +13,7 @@ class TrendingActor extends StatefulWidget {
 }
 
 class _TrendingActorState extends State<TrendingActor> {
-  late Future<Either<HttpRequestFailure, List<Actor>>> _future;
-  late PageController _pageController;
-
-  // int _currentCard = 0;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // _pageController = PageController(viewportFraction: 0.8, initialPage: 1);
-    // _pageController = PageController(initialPage: 1);
-    _pageController = PageController();
-
-    // _pageController.addListener(() {
-    //   _currentCard = _pageController.page!.toInt();
-    //   setState(() {});
-    // });
-
-    _future = context.read<TrendingRepository>().getActors();
-  }
+  final _pageController = PageController();
 
   @override
   void dispose() {
@@ -45,76 +24,60 @@ class _TrendingActorState extends State<TrendingActor> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    final bloc = context.watch<HomeController>();
+    final state = bloc.state;
     return Expanded(
-      child: FutureBuilder<Either<HttpRequestFailure, List<Actor>>>(
-        // future: context.read<TrendingRepository>().getActors(),
-        key: ValueKey(_future),
-        future: _future,
-        builder: (_, snapshot) {
-          //
+      child: state.when(loading: (_) {
+        return const Center(child: CircularProgressIndicator());
+        //
+      }, failed: (_) {
+        return RequestFailed(onRetry: () {});
+      }, loaded: (_, __, actors) {
+        //
 
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          final response = snapshot.data;
-          print(response);
-
-          return response!.when(
-            left: (failure) {
-              return RequestFailed(onRetry: () {
-                _future = context.read<TrendingRepository>().getActors();
-                setState(() {});
-              });
-            },
-            right: (actors) => Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                PageView.builder(
-                  controller: _pageController,
-                  // *PADENDS PARA ALINEAR A LA IZQUIERDA
-                  padEnds: false,
-                  itemBuilder: (context, index) {
-                    final actor = actors[index];
-                    return ActorTile(
-                      actor: actor,
-                    );
-                  },
-                  scrollDirection: Axis.horizontal,
-                  itemCount: actors.length,
-                ),
-                // Text('${_currentCard + 1}/${actors.length}'),
-
-                Positioned(
-                  bottom: 30,
-                  child: AnimatedBuilder(
-                    animation: _pageController,
-                    builder: (_, __) {
-                      final int currentCard =
-                          _pageController.page?.toInt() ?? 0;
-                      return Row(
-                        children: List.generate(
-                          actors.length,
-                          (index) => Icon(
-                            Icons.circle,
-                            size: 14,
-                            color: currentCard == index
-                                ? Colors.blue
-                                : Colors.white,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-
-                const SizedBox(height: 15),
-              ],
+        return Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            PageView.builder(
+              controller: _pageController,
+              // *PADENDS PARA ALINEAR A LA IZQUIERDA
+              padEnds: false,
+              itemBuilder: (context, index) {
+                final actor = actors[index];
+                return ActorTile(
+                  actor: actor,
+                );
+              },
+              scrollDirection: Axis.horizontal,
+              itemCount: actors.length,
             ),
-          );
-        },
-      ),
+            // Text('${_currentCard + 1}/${actors.length}'),
+
+            Positioned(
+              bottom: 30,
+              child: AnimatedBuilder(
+                animation: _pageController,
+                builder: (_, __) {
+                  final int currentCard = _pageController.page?.toInt() ?? 0;
+                  return Row(
+                    children: List.generate(
+                      actors.length,
+                      (index) => Icon(
+                        Icons.circle,
+                        size: 14,
+                        color:
+                            currentCard == index ? Colors.blue : Colors.white,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            const SizedBox(height: 15),
+          ],
+        );
+      }),
     );
   }
 }

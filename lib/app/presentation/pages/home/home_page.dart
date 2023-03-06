@@ -27,6 +27,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final SessionController sessionController = context.read();
     final user = sessionController.state;
+    final bloc = context.watch<HomeController>();
 
     return Scaffold(
       body: SafeArea(
@@ -37,7 +38,7 @@ class HomePage extends StatelessWidget {
               //
               //
               onRefresh: () async {
-                //
+                await bloc.init();
               },
 
               //

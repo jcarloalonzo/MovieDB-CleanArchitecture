@@ -13,15 +13,27 @@ class HomeController extends StateNotifier<HomeState> {
     final result =
         await trendingRepository.getMoviesAndSeries(state.timeWindow);
 
+    final actorsResult = await trendingRepository.getActors();
+
     result.when(
       left: (_) {
         state = HomeState.failed(timeWindow: state.timeWindow);
       },
       right: (list) {
-        state = HomeState.loaded(
-          movies: list,
-          timeWindow: state.timeWindow,
+        actorsResult.when(
+          left: (_) {
+            //
+          },
+          right: (actors) {
+//
+            state = HomeState.loaded(
+              movies: list,
+              timeWindow: state.timeWindow,
+              actors: actors,
+            );
+          },
         );
+
         //
       },
     );
