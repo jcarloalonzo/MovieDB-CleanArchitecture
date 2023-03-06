@@ -29,19 +29,23 @@ class TrendingList extends StatelessWidget {
             builder: (_, constraints) {
               final width = constraints.maxHeight * 0.75;
               return Center(
-                child: Builder(
-                  builder: (_) {
-                    if (state.loading) return const CircularProgressIndicator();
-
-                    if (state.movies == null) {
-                      return RequestFailed(onRetry: () {});
-                    }
-
+                child: state.when(
+                  loading: (_) {
+                    return const CircularProgressIndicator();
+                  },
+                  failed: (_) {
+                    return RequestFailed(
+                      onRetry: () {
+                        //
+                      },
+                    );
+                  },
+                  loaded: (list, _) {
                     return ListView.separated(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
-                        final media = state.movies![index];
+                        final media = list[index];
 
                         return TrendingTile(
                           media: media,
@@ -49,13 +53,37 @@ class TrendingList extends StatelessWidget {
                         );
                       },
                       separatorBuilder: (_, __) => const SizedBox(width: 10),
-                      itemCount: state.movies!.length,
+                      itemCount: list.length,
                     );
-                    //
-                    //
-                    //
                   },
                 ),
+                // child: Builder(
+                //   builder: (_) {
+                //     if (state.loading) return const CircularProgressIndicator();
+
+                //     if (state.movies == null) {
+                //       return RequestFailed(onRetry: () {});
+                //     }
+
+                //     return ListView.separated(
+                //       padding: const EdgeInsets.symmetric(horizontal: 15),
+                //       scrollDirection: Axis.horizontal,
+                //       itemBuilder: (context, index) {
+                //         final media = state.movies![index];
+
+                //         return TrendingTile(
+                //           media: media,
+                //           width: width,
+                //         );
+                //       },
+                //       separatorBuilder: (_, __) => const SizedBox(width: 10),
+                //       itemCount: state.movies!.length,
+                //     );
+                //     //
+                //     //
+                //     //
+                //   },
+                // ),
                 //
               );
             },

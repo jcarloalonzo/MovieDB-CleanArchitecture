@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../domain/enums.dart';
 import '../../../domain/repositories/trending_repository.dart';
 import '../../global/controller/session_controller.dart';
 import 'components/actor/trending_actor.dart';
@@ -14,7 +15,8 @@ class HomePage extends StatelessWidget {
   static Widget init(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => HomeController(
-        HomeState(loading: true),
+        // HomeState(loading: true),
+        HomeState.loading(timeWindow: TimeWindow.day),
         trendingRepository: context.read<TrendingRepository>(),
       )..init(),
       builder: (_, __) => const HomePage._(),
