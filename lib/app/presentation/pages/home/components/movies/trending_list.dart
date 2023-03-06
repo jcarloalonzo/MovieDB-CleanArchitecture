@@ -29,25 +29,33 @@ class TrendingList extends StatelessWidget {
             builder: (_, constraints) {
               final width = constraints.maxHeight * 0.75;
               return Center(
-                child: state.loading
-                    ? const CircularProgressIndicator()
-                    : state.movies == null
-                        ? RequestFailed(onRetry: () {})
-                        : ListView.separated(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              final media = state.movies![index];
+                child: Builder(
+                  builder: (_) {
+                    if (state.loading) return const CircularProgressIndicator();
 
-                              return TrendingTile(
-                                media: media,
-                                width: width,
-                              );
-                            },
-                            separatorBuilder: (_, __) =>
-                                const SizedBox(width: 10),
-                            itemCount: state.movies!.length,
-                          ),
+                    if (state.movies == null) {
+                      return RequestFailed(onRetry: () {});
+                    }
+
+                    return ListView.separated(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        final media = state.movies![index];
+
+                        return TrendingTile(
+                          media: media,
+                          width: width,
+                        );
+                      },
+                      separatorBuilder: (_, __) => const SizedBox(width: 10),
+                      itemCount: state.movies!.length,
+                    );
+                    //
+                    //
+                    //
+                  },
+                ),
                 //
               );
             },
