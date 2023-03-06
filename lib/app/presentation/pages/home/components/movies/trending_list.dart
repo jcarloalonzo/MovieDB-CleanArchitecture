@@ -6,6 +6,7 @@ import '../../../../../domain/enums.dart';
 import '../../../../../domain/failures/http_request/http_request_failure.dart';
 import '../../../../../domain/models/media/media.dart';
 import '../../../../../domain/repositories/trending_repository.dart';
+import '../../../../global/widgets/request_failed.dart';
 import 'trending_tile.dart';
 import 'trending_time_window.dart';
 
@@ -18,7 +19,7 @@ class TrendingList extends StatefulWidget {
 
 class _TrendingListState extends State<TrendingList> {
   late Future<Either<HttpRequestFailure, List<Media>>> _future;
-  final TimeWindow _timeWindow = TimeWindow.day;
+  TimeWindow _timeWindow = TimeWindow.day;
 
   TrendingRepository get _repository => context.read<TrendingRepository>();
   //
@@ -31,6 +32,13 @@ class _TrendingListState extends State<TrendingList> {
     _future = repository.getMoviesAndSeries(_timeWindow);
   }
 
+  void _updateFuture(TimeWindow timeWindow) {
+    setState(() {
+      _timeWindow = timeWindow;
+      _future = _repository.getMoviesAndSeries(_timeWindow);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<TrendingRepository>();
@@ -39,15 +47,11 @@ class _TrendingListState extends State<TrendingList> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TrendingTimeWindow(
-            timeWindow: _timeWindow,
-            onChanged: (timeWindow) {
-              setState(() {
-                timeWindow = timeWindow;
-                _future = _repository.getMoviesAndSeries(timeWindow);
-              });
-            }),
-
-        // https://www.udemy.com/course/flutter-desde-cero-darwin-morocho/learn/lecture/35170188#questions
+          timeWindow: _timeWindow,
+          onChanged: (timeWindow) {
+            _updateFuture(_timeWindow);
+          },
+        ),
         const SizedBox(height: 10),
         AspectRatio(
           aspectRatio: 16 / 8,
@@ -71,7 +75,9 @@ class _TrendingListState extends State<TrendingList> {
 
                     return snapshot.data!.when(
                       left: (failure) {
-                        return const Text('text');
+                        return RequestFailed(onRetry: () {
+                          _updateFuture(_timeWindow);
+                        });
                       },
                       right: (list) {
                         return ListView.separated(

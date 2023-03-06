@@ -44,7 +44,7 @@ class TrendingTimeWindow extends StatelessWidget {
                   ],
                   onChanged: (mTimeWindow) {
                     if (mTimeWindow != null && timeWindow != mTimeWindow) {
-                      onChanged(timeWindow);
+                      onChanged(mTimeWindow);
                     }
                   },
                 ),

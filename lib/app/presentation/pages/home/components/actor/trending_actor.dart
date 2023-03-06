@@ -5,6 +5,7 @@ import '../../../../../domain/either/either.dart';
 import '../../../../../domain/failures/http_request/http_request_failure.dart';
 import '../../../../../domain/models/actors/actors.dart';
 import '../../../../../domain/repositories/trending_repository.dart';
+import '../../../../global/widgets/request_failed.dart';
 import 'actor_tile.dart';
 
 class TrendingActor extends StatefulWidget {
@@ -48,6 +49,7 @@ class _TrendingActorState extends State<TrendingActor> {
     return Expanded(
       child: FutureBuilder<Either<HttpRequestFailure, List<Actor>>>(
         // future: context.read<TrendingRepository>().getActors(),
+        key: ValueKey(_future),
         future: _future,
         builder: (_, snapshot) {
           //
@@ -61,7 +63,10 @@ class _TrendingActorState extends State<TrendingActor> {
 
           return response!.when(
             left: (failure) {
-              return const Text('error');
+              return RequestFailed(onRetry: () {
+                _future = context.read<TrendingRepository>().getActors();
+                setState(() {});
+              });
             },
             right: (actors) => Stack(
               alignment: Alignment.bottomCenter,
