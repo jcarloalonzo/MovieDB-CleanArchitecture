@@ -16,12 +16,29 @@ class TrendingActor extends StatefulWidget {
 
 class _TrendingActorState extends State<TrendingActor> {
   late Future<Either<HttpRequestFailure, List<Actor>>> _future;
+  late PageController _pageController;
 
+  // int _currentCard = 0;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    // _pageController = PageController(viewportFraction: 0.8, initialPage: 1);
+    _pageController = PageController(initialPage: 1);
+
+    // _pageController.addListener(() {
+    //   _currentCard = _pageController.page!.toInt();
+    //   setState(() {});
+    // });
+
     _future = context.read<TrendingRepository>().getActors();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -29,8 +46,8 @@ class _TrendingActorState extends State<TrendingActor> {
     final width = MediaQuery.of(context).size.width;
     return Expanded(
       child: FutureBuilder<Either<HttpRequestFailure, List<Actor>>>(
-        future: context.read<TrendingRepository>().getActors(),
-        // future: _future,
+        // future: context.read<TrendingRepository>().getActors(),
+        future: _future,
         builder: (_, snapshot) {
           //
 
@@ -41,45 +58,41 @@ class _TrendingActorState extends State<TrendingActor> {
           final response = snapshot.data;
           print(response);
 
-          return response!.when(left: (failure) {
-            return const Text('error');
-          }, right: (actors) {
-            // return PageView(
-            //   scrollDirection: Axis.horizontal,
-            //   children: actors.map((actor) {
-            //     return SizedBox(
-            //       width: width,
-            //       child: Padding(
-            //         padding: const EdgeInsets.all(15.0),
-            //         child: ClipRRect(
-            //           borderRadius: BorderRadius.circular(20),
-            //           child: Stack(
-            //             children: [
-            //               Positioned.fill(
-            //                 child: ExtendedImage.network(
-            //                   getImageURL(actor.profilePath!),
-            //                   fit: BoxFit.cover,
-            //                 ),
-            //               ),
-            //             ],
-            //           ),
-            //         ),
-            //       ),
-            //     );
-            //   }).toList(),
-            // );
+          return response!.when(
+            left: (failure) {
+              return const Text('error');
+            },
+            right: (actors) => Column(
+              children: [
+                Expanded(
+                  child: PageView.builder(
+                    controller: _pageController,
+                    // *PADENDS PARA ALINEAR A LA IZQUIERDA
+                    padEnds: false,
+                    itemBuilder: (context, index) {
+                      final actor = actors[index];
+                      return ActorTile(
+                        actor: actor,
+                      );
+                    },
+                    scrollDirection: Axis.horizontal,
+                    itemCount: actors.length,
+                  ),
+                ),
+                // Text('${_currentCard + 1}/${actors.length}'),
 
-            return PageView.builder(
-              itemBuilder: (context, index) {
-                final actor = actors[index];
-                return ActorTile(
-                  actor: actor,
-                );
-              },
-              scrollDirection: Axis.horizontal,
-              itemCount: actors.length,
-            );
-          });
+                AnimatedBuilder(
+                  animation: _pageController,
+                  builder: (_, __) {
+                    final int currentCard = _pageController.page?.toInt() ?? 1;
+                    return Text('${currentCard + 1}/${actors.length}');
+                  },
+                ),
+
+                const SizedBox(height: 15),
+              ],
+            ),
+          );
         },
       ),
     );
