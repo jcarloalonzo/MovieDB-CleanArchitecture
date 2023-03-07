@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../global/widgets/request_failed.dart';
 import '../../home_controller.dart';
+import '../../home_state.dart';
 import 'trending_tile.dart';
 import 'trending_time_window.dart';
 
@@ -18,9 +19,10 @@ class TrendingList extends StatelessWidget {
       children: [
         TrendingTimeWindow(
           timeWindow: state.timeWindow,
-          onChanged: (timeWindow) {
-            //
-          },
+          // onChanged: (timeWindow) {
+          //   bloc.onTimeWindowsChanged(timeWindow);
+          // },
+          onChanged: bloc.onTimeWindowsChanged,
         ),
         const SizedBox(height: 10),
         AspectRatio(
@@ -36,7 +38,11 @@ class TrendingList extends StatelessWidget {
                   failed: (_) {
                     return RequestFailed(
                       onRetry: () {
-                        //
+                        bloc.getMovies(
+                          moviesState: MoviesState.loading(
+                            timeWindow: bloc.state.moviesState.timeWindow,
+                          ),
+                        );
                       },
                     );
                   },

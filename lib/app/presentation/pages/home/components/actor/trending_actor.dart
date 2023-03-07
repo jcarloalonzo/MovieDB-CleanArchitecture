@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../global/widgets/request_failed.dart';
 import '../../home_controller.dart';
+import '../../home_state.dart';
 import 'actor_tile.dart';
 
 class TrendingActor extends StatefulWidget {
@@ -31,7 +32,11 @@ class _TrendingActorState extends State<TrendingActor> {
         return const Center(child: CircularProgressIndicator());
         //
       }, failed: () {
-        return RequestFailed(onRetry: () {});
+        return RequestFailed(onRetry: () {
+          bloc.getActors(
+            actorState: const ActorsState.loading(),
+          );
+        });
       }, loaded: (actors) {
         //
 
