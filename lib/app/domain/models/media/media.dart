@@ -43,6 +43,14 @@ enum MediaType {
   tv,
 }
 
+Object? readTitleValue(Map map, String _) {
+  return map['title'] ?? map['name'];
+}
+
+Object? readOriginalTitleValue(Map map, String _) {
+  return map['original_title'] ?? map['original_name'];
+}
+
 List<Media> getMediaList(List list) {
   return list
       .where((e) =>
