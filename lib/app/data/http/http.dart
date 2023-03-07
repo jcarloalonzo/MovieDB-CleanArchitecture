@@ -93,11 +93,11 @@ class Http {
       }
 
       final statusCode = response.statusCode;
-      print(response.body);
+      // print(response.body);
       final responseBody = _parseResponseBody(
         response.body,
       );
-      print(responseBody);
+      // print(responseBody);
       logs = {
         ...logs,
         'startTime': DateTime.now().toString(),

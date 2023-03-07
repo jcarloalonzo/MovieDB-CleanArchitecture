@@ -2,8 +2,8 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../domain/models/media/media.dart';
-import '../../../../routes/routes.dart';
 import '../../../../utils/get_image_url.dart';
+import '../../../movie/movie_page.dart';
 
 class TrendingTile extends StatelessWidget {
   const TrendingTile(
@@ -19,8 +19,11 @@ class TrendingTile extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (media.mediaType == MediaType.movie) {
-          Navigator.pushNamed(context, Routes.movie, arguments: media.id);
-          //
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context) {
+              return MoviePage(movieID: media.id!);
+            },
+          ));
         }
       },
       child: ClipRRect(

@@ -23,6 +23,8 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         initialRoute: Routes.splash,
         routes: MyRoutes.listRoutes,
+
+        //
       ),
     );
   }
