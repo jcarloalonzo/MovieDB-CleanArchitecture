@@ -31,7 +31,7 @@ class Movie with _$Movie {
     String? tagline,
     String? title,
     bool? video,
-    @JsonKey(name: 'vote_average') double? voteAverage,
+    @JsonKey(name: 'vote_average') required double voteAverage,
     @JsonKey(name: 'vote_count') int? voteCount,
   }) = _Movie;
 
