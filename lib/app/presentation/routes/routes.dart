@@ -7,4 +7,5 @@ class Routes {
   static const home = '/Home';
   static const movie = '/movie';
   static const offline = '/OffLine';
+  static const favorites = '/favorites';
 }

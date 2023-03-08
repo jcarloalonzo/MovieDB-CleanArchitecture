@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../domain/repositories/trending_repository.dart';
 import '../../global/controller/session_controller.dart';
+import '../../routes/routes.dart';
 import 'components/actor/trending_actor.dart';
 import 'components/movies/trending_list.dart';
 import 'home_controller.dart';
@@ -30,6 +31,29 @@ class HomePage extends StatelessWidget {
     final bloc = context.watch<HomeController>();
 
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.favorites);
+            },
+            icon: const Icon(
+              Icons.favorite,
+              color: Colors.black,
+            ),
+          ),
+          //
+          IconButton(
+            onPressed: () {
+              //
+            },
+            icon: const Icon(
+              Icons.person,
+              color: Colors.black,
+            ),
+          )
+        ],
+      ),
       body: SafeArea(
         child: LayoutBuilder(
           builder: (_, contraints) {

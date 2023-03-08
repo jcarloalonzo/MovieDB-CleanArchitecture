@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../pages/favorites/favorites_page.dart';
 import '../pages/home/home_page.dart';
 import '../pages/offline/pages/offline_page.dart';
 import '../pages/sign_in/sign_in_page.dart';
@@ -12,5 +13,6 @@ class MyRoutes {
     Routes.signin: (context) => SignInPage.init(context),
     Routes.home: (context) => HomePage.init(context),
     Routes.offline: (context) => const OffLinePage(),
+    Routes.favorites: (context) => const FavoritesPage(),
   };
 }

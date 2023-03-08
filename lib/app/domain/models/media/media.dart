@@ -12,7 +12,7 @@ class Media with _$Media {
   const factory Media({
     bool? adult,
     @JsonKey(name: 'backdrop_path') String? backdropPath,
-    int? id,
+    required int id,
     String? name,
     @JsonKey(name: 'original_language') String? originalLanguage,
     @JsonKey(name: 'original_name') String? originalName,

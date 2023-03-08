@@ -21,6 +21,8 @@ import 'app/domain/repositories/authentication_repository.dart';
 import 'app/domain/repositories/connecivity_repository.dart';
 import 'app/domain/repositories/movies_repository.dart';
 import 'app/domain/repositories/trending_repository.dart';
+import 'app/presentation/global/controller/favorites/favorites_controller.dart';
+import 'app/presentation/global/controller/favorites/state/favorites_state.dart';
 import 'app/presentation/global/controller/session_controller.dart';
 import 'app/presentation/my_app.dart';
 
@@ -87,6 +89,13 @@ void main() {
         ChangeNotifierProvider<SessionController>(
           create: (context) => SessionController(
             authenticationRepository: context.read<AuthenticationRepository>(),
+          ),
+        ),
+
+        //
+        ChangeNotifierProvider<FavoritesController>(
+          create: (context) => FavoritesController(
+            FavoritesState.loading(),
           ),
         ),
         //
