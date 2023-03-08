@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../../domain/repositories/movies_repository.dart';
 import '../movie_state.dart';
+import 'movie_cast.dart';
 import 'movie_header.dart';
 
 class MovieContent extends StatelessWidget {
@@ -20,6 +23,15 @@ class MovieContent extends StatelessWidget {
           child: Text(
             movie.overview ?? '',
           ),
+        ),
+        MovieCast(movieID: movie.id),
+        ElevatedButton(
+          onPressed: () async {
+            final bloc =
+                context.read<MoviesRepository>().getCastByMovie(768362);
+            print(bloc);
+          },
+          child: const Text('m'),
         ),
       ],
     );

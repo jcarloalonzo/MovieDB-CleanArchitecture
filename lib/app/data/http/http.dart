@@ -105,7 +105,6 @@ class Http {
         'responseBody': responseBody,
       };
       if (statusCode >= 200 && statusCode < 300) {
-        print('statuc dodeeee🔥');
         return Either.right(
           onSuccess(
             responseBody,
@@ -153,16 +152,16 @@ class Http {
         };
         log('');
 
-//         log(
-//           '''
-// 🔥
-// -----------------------------------------------------------------
-// ${(const JsonEncoder.withIndent(' ').convert(logs))}
-// -----------------------------------------------------------------
-// 🔥
-// ''',
-//           stackTrace: stackTrace,
-//         );
+        log(
+          '''
+🔥
+-----------------------------------------------------------------
+${(const JsonEncoder.withIndent(' ').convert(logs))}
+-----------------------------------------------------------------
+🔥
+''',
+          stackTrace: stackTrace,
+        );
       }
     }
   }
