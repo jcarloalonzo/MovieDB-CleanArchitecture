@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../domain/repositories/authentication_repository.dart';
+import '../../global/controller/favorites/favorites_controller.dart';
 import '../../global/controller/session_controller.dart';
 import '../../routes/routes.dart';
 import 'sign_in_controller.dart';
@@ -89,7 +90,6 @@ class SignInPage extends StatelessWidget {
 
   Future _submit(BuildContext context) async {
     final bloc = context.read<SignInController>();
-    final userBloc = Provider.of<SessionController>(context, listen: false);
     final result = await bloc.submit();
     if (!bloc.mounted) return;
 
@@ -103,30 +103,6 @@ class SignInPage extends StatelessWidget {
           notVerified: () => 'Email not verifies',
         );
 
-        // ! se reemplaza con freezed funcional
-        // result.when(
-        //     //
-        //     (failure) {
-        //   final message = () {
-        //     if (failure is NotFound) {
-        //       return 'Not Found';
-        //     }
-        //     if (failure is Unauthorized) {
-        //       return 'Invalid Password';
-        //     }
-        //     if (failure is Network) {
-        //       return 'Network Error';
-        //     }
-        //     return 'Error';
-        //   }();
-
-        // final message = {
-        //   SignInFailure.notFound: 'Not Found',
-        //   SignInFailure.unauthorized: 'Invalid Password',
-        //   SignInFailure.unknown: 'Error',
-        //   SignInFailure.network: 'Network error',
-        // }[failure];
-
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(message),
@@ -134,7 +110,12 @@ class SignInPage extends StatelessWidget {
         );
       },
       right: (user) {
+        final userBloc = Provider.of<SessionController>(context, listen: false);
+        final favoritesBloc = context.read<FavoritesController>();
+
         userBloc.setUser(user);
+
+        favoritesBloc.init();
         //
         Navigator.pushReplacementNamed(context, Routes.home);
       },

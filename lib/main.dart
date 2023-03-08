@@ -38,7 +38,7 @@ void main() {
 
   //
 
-  final accountAPI = AccountAPI(http);
+  final accountAPI = AccountAPI(http, sessionService);
 
   runApp(
     MultiProvider(
@@ -94,9 +94,8 @@ void main() {
 
         //
         ChangeNotifierProvider<FavoritesController>(
-          create: (context) => FavoritesController(
-            FavoritesState.loading(),
-          ),
+          create: (context) => FavoritesController(FavoritesState.loading(),
+              accountRepository: context.read<AccountRepository>()),
         ),
         //
         //

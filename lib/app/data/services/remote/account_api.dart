@@ -55,13 +55,9 @@ class AccountAPI {
             return MapEntry(media.id, media);
           },
         );
-
         final map = <int, Media>{};
-
         map.addEntries(iterable);
-
         return map;
-
         // return list
         //     .where((e) =>
         //         e['media_type'] != 'person' &&
