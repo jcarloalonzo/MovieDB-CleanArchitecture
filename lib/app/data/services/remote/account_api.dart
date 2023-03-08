@@ -51,7 +51,7 @@ class AccountAPI {
 
         final iterable = list.map(
           (e) {
-            final media = Media.fromJson(json);
+            final media = Media.fromJson({...e, 'media_type': type.name});
             return MapEntry(media.id, media);
           },
         );

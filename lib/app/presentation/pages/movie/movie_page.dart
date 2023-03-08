@@ -33,7 +33,7 @@ class MoviePage extends StatelessWidget {
               failed: (_) {
                 return RequestFailed(
                   onRetry: () {
-                    //
+                    bloc.init();
                   },
                 );
               },
