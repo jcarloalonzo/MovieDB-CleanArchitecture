@@ -7,6 +7,5 @@ abstract class AccountRepository {
   Future<User?> getUserData();
 
   Future<Either<HttpRequestFailure, Map<int, Media>>> getFavorites(
-    MediaType type,
-  );
+      MediaType type);
 }

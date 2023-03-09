@@ -22,13 +22,11 @@ class Media with _$Media {
     @JsonKey(name: 'media_type') MediaType? mediaType,
     @JsonKey(name: 'genre_ids') List<int>? genreIds,
     double? popularity,
-    @JsonKey(name: 'first_air_date') DateTime? firstAirDate,
     @JsonKey(name: 'vote_average') double? voteAverage,
     @JsonKey(name: 'vote_count') int? voteCount,
     @JsonKey(name: 'origin_country') List<String>? originCountry,
     String? title,
     @JsonKey(name: 'original_title') String? originalTitle,
-    @JsonKey(name: 'release_date') DateTime? releaseDate,
     bool? video,
   }) = _Media;
 

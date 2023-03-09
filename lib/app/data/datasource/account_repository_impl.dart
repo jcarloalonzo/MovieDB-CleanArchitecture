@@ -27,7 +27,9 @@ class AccountRepositoryImpl implements AccountRepository {
 
   @override
   Future<Either<HttpRequestFailure, Map<int, Media>>> getFavorites(
-      MediaType type) {
-    return _accountAPI.getFavorites(type);
+      MediaType type) async {
+    final x = await _accountAPI.getFavorites(type);
+    print(x);
+    return x;
   }
 }

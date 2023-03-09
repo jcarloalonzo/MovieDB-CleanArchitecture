@@ -115,7 +115,7 @@ class SignInPage extends StatelessWidget {
 
         userBloc.setUser(user);
 
-        favoritesBloc.init();
+        // favoritesBloc.init();
         //
         Navigator.pushReplacementNamed(context, Routes.home);
       },

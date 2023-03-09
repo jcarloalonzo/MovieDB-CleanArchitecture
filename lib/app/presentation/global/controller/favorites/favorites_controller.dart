@@ -7,9 +7,10 @@ class FavoritesController extends StateNotifier<FavoritesState> {
   FavoritesController(super.state, {required this.accountRepository});
 
   final AccountRepository accountRepository;
-  Future<void> init() async {
-    final moviesResult = await accountRepository.getFavorites(MediaType.movie);
 
+  Future<void> init() async {
+    state = FavoritesState.loading();
+    final moviesResult = await accountRepository.getFavorites(MediaType.movie);
     //
     state = await moviesResult.when(
       left: (_) async {
@@ -20,6 +21,7 @@ class FavoritesController extends StateNotifier<FavoritesState> {
         final seriesResult = await accountRepository.getFavorites(MediaType.tv);
         return seriesResult.when(
           left: (_) {
+            print(_);
             return state = FavoritesState.failed();
             //
           },

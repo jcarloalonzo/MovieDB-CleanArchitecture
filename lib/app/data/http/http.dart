@@ -32,7 +32,6 @@ class Http {
   }) async {
     Map<String, dynamic> logs = {};
     StackTrace? stackTrace;
-
     try {
       if (userApiKey) {
         queryParameters = {
@@ -40,11 +39,9 @@ class Http {
           'api_key': _apiKey,
         };
       }
-
       Uri url = Uri.parse(
         path.startsWith('http') ? path : '$_baseUrl$path',
       );
-
       if (queryParameters.isNotEmpty) {
         url = url.replace(queryParameters: queryParameters);
       }
@@ -76,11 +73,9 @@ class Http {
             headers: headers,
             body: bodyString,
           );
-
           break;
         case HttpMethod.delete:
           response = await _client.delete(url);
-
           break;
         case HttpMethod.put:
           await _client.put(
@@ -88,10 +83,8 @@ class Http {
             headers: headers,
             body: bodyString,
           );
-
           break;
       }
-
       final statusCode = response.statusCode;
       // print(response.body);
       final responseBody = _parseResponseBody(
@@ -111,7 +104,6 @@ class Http {
           ),
         );
       }
-
       return Either.left(
         HttpFailure(
           statusCode: statusCode,
@@ -119,9 +111,7 @@ class Http {
         ),
       );
     } catch (e, s) {
-      print(e);
       stackTrace = s;
-
       // * EL STACKTRACE NOS PERMITE SABER EN QUE LINEA OCURRIO NUESTRO ERROR
       // SocketException , pertenece al paquete dart:io lo que significa que no es compatible en web
       logs = {
@@ -139,7 +129,6 @@ class Http {
           ),
         );
       }
-
       return Either.left(
         HttpFailure(exception: e),
       );
@@ -151,7 +140,6 @@ class Http {
           'endTime': DateTime.now().toString(),
         };
         log('');
-
         log(
           '''
 🔥

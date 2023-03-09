@@ -21,7 +21,7 @@ class TrendingTile extends StatelessWidget {
         if (media.mediaType == MediaType.movie) {
           Navigator.push(context, MaterialPageRoute(
             builder: (context) {
-              return MoviePage(movieID: media.id!);
+              return MoviePage(movieID: media.id);
             },
           ));
         }
