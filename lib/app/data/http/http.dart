@@ -29,6 +29,7 @@ class Http {
     Map<String, dynamic> bodyRequest = const {},
     required R Function(dynamic responseBody) onSuccess,
     bool userApiKey = true,
+    Duration timeout = const Duration(seconds: 10),
   }) async {
     Map<String, dynamic> logs = {};
     StackTrace? stackTrace;
@@ -58,31 +59,37 @@ class Http {
       };
       switch (method) {
         case HttpMethod.get:
-          response = await _client.get(url);
+          response = await _client.get(url).timeout(timeout);
           break;
         case HttpMethod.post:
-          response = await _client.post(
-            url,
-            headers: headers,
-            body: bodyString,
-          );
+          response = await _client
+              .post(
+                url,
+                headers: headers,
+                body: bodyString,
+              )
+              .timeout(timeout);
           break;
         case HttpMethod.patch:
-          response = await _client.patch(
-            url,
-            headers: headers,
-            body: bodyString,
-          );
+          response = await _client
+              .patch(
+                url,
+                headers: headers,
+                body: bodyString,
+              )
+              .timeout(timeout);
           break;
         case HttpMethod.delete:
-          response = await _client.delete(url);
+          response = await _client.delete(url).timeout(timeout);
           break;
         case HttpMethod.put:
-          await _client.put(
-            url,
-            headers: headers,
-            body: bodyString,
-          );
+          await _client
+              .put(
+                url,
+                headers: headers,
+                body: bodyString,
+              )
+              .timeout(timeout);
           break;
       }
       final statusCode = response.statusCode;

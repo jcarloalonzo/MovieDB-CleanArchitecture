@@ -7,11 +7,16 @@ import '../controller/favorites/favorites_controller.dart';
 Future<void> markAsFavorite({
   required BuildContext context,
   required Media media,
+  required bool Function() mounted,
 }) async {
   //
   final favoritesController = context.read<FavoritesController>();
 
   final response = await favoritesController.markAsFavorite(media);
+
+  if (!mounted()) {
+    return;
+  }
 
   response.whenOrNull(left: (failure) {
     final errorMessage = failure.when(
