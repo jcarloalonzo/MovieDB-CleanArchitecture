@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../domain/models/media/media.dart';
 import '../../../global/controller/favorites/state/favorites_state.dart';
 import '../../../utils/get_image_url.dart';
+import '../../movie/movie_page.dart';
 
 class FavoritesContent extends StatelessWidget {
   const FavoritesContent(
@@ -25,18 +26,36 @@ class FavoritesContent extends StatelessWidget {
   }
 }
 
-class FavoritesList extends StatelessWidget {
+class FavoritesList extends StatefulWidget {
   const FavoritesList({super.key, required this.items});
   final List<Media> items;
 
   @override
+  State<FavoritesList> createState() => _FavoritesListState();
+}
+
+class _FavoritesListState extends State<FavoritesList>
+    with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
-    print(items.last.originalName);
+    super.build(context);
+
     return ListView.builder(
       itemBuilder: (_, index) {
-        final item = items[index];
+        final item = widget.items[index];
 
-        return Padding(
+        return MaterialButton(
+          onPressed: () {
+            //
+            //
+            if (item.mediaType == MediaType.movie) {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return MoviePage(movieID: item.id);
+                },
+              ));
+            }
+          },
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: <Widget>[
@@ -66,7 +85,10 @@ class FavoritesList extends StatelessWidget {
           ),
         );
       },
-      itemCount: items.length,
+      itemCount: widget.items.length,
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

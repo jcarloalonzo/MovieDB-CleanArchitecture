@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../../../../domain/models/media/media.dart';
-import '../../../../domain/repositories/account_repository.dart';
 import '../movie_state.dart';
 import 'movie_cast.dart';
 import 'movie_header.dart';
@@ -26,14 +23,14 @@ class MovieContent extends StatelessWidget {
           ),
         ),
         MovieCast(movieID: movie.id),
-        ElevatedButton(
-          onPressed: () async {
-            final bloc = context.read<AccountRepository>();
-            final seriesResult = await bloc.getFavorites(MediaType.tv);
-            print(seriesResult);
-          },
-          child: const Text('m'),
-        ),
+        // ElevatedButton(
+        //   onPressed: () async {
+        //     final bloc = context.read<AccountRepository>();
+        //     final seriesResult = await bloc.getFavorites(MediaType.tv);
+        //     print(seriesResult);
+        //   },
+        //   child: const Text('m'),
+        // ),
       ],
     );
   }
