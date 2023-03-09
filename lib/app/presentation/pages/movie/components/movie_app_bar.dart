@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../global/controller/favorites/favorites_controller.dart';
+import '../../../global/utils/mark_as_favorite.dart';
 import '../movie_controller.dart';
 
 class MovieAppBar extends StatelessWidget with PreferredSizeWidget {
@@ -10,8 +11,6 @@ class MovieAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = context.watch<MovieController>();
-
-    // escuchar cambios favoritescontroller
     final favoritesController = context.watch<FavoritesController>();
     return AppBar(
       //
@@ -25,7 +24,10 @@ class MovieAppBar extends StatelessWidget with PreferredSizeWidget {
               },
               loaded: (favoritesState) {
                 return IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    markAsFavorite(
+                        context: context, media: movieState.movie.toMedia());
+                  },
                   icon: Icon(
                     favoritesState.movies.containsKey(movieState.movie.id)
                         ? Icons.favorite

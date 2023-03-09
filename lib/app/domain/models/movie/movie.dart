@@ -5,6 +5,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../genre/genre.dart';
+import '../media/media.dart';
 
 part 'movie.freezed.dart';
 part 'movie.g.dart';
@@ -35,5 +36,20 @@ class Movie with _$Movie {
     @JsonKey(name: 'vote_count') int? voteCount,
   }) = _Movie;
 
+  // PARA CREAR UNA FUNCION QUE TE PERMITA TENER UNA INSTANCIA ES
+  const Movie._();
+
   factory Movie.fromJson(Map<String, dynamic> json) => _$MovieFromJson(json);
+
+  Media toMedia() {
+    return Media(
+        id: id,
+        overview: overview,
+        title: title,
+        originalTitle: originalTitle,
+        posterPath: posterPath,
+        backdropPath: backdropPath,
+        voteAverage: voteAverage,
+        mediaType: MediaType.movie);
+  }
 }
