@@ -33,4 +33,54 @@ class FavoritesController extends StateNotifier<FavoritesState> {
       },
     );
   }
+
+  markAsFavorite(Media media) async {
+    state.mapOrNull(loaded: (loadedState) async {
+      // final keys = media.mediaType == MediaType.movie
+      //     ? loadedState.movies.keys
+      //     : loadedState.series.keys;
+
+//
+//
+
+      // final map = media.mediaType == MediaType.movie
+      //     ? loadedState.movies
+      //     : loadedState.series;
+
+//*para crear la copia de un map
+      // final map = Map<int, Media>.from(media.mediaType == MediaType.movie
+      //     ? loadedState.movies
+      //     : loadedState.series);
+      final bool isMovie = media.mediaType == MediaType.movie;
+      final map = isMovie ? {...loadedState.movies} : {...loadedState.series};
+
+      //
+
+      final favorite = !map.keys.contains(media.id);
+
+      final result = await accountRepository.markAsFavorite(
+        mediaID: media.id,
+        type: media.mediaType!,
+        favorite: favorite,
+      );
+
+      result.whenOrNull(right: (_) {
+        // * ACA ESTAMOS TRABAJANDO CON LA COPIA
+        if (favorite) {
+          map[media.id] = media;
+        } else {
+          map.remove(media.id);
+        }
+
+        // *AQUI VALIDAMOS EL ESTADO
+        // state = isMovie
+        //     ? loadedState.copyWith(
+        //         movies: map,
+        //       )
+        //     : loadedState.copyWith(
+        //         series: map,
+        //       );
+      });
+    });
+  }
 }
