@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../domain/repositories/authentication_repository.dart';
 import '../../global/controller/favorites/favorites_controller.dart';
 import '../../global/controller/session_controller.dart';
-import '../../routes/routes.dart';
+import 'components/submit_buttom.dart';
 import 'sign_in_controller.dart';
 import 'sign_in_state.dart';
 
@@ -15,12 +15,13 @@ class SignInPage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => SignInController(
 // nos pide pasar el estado inicial
-          const SignInState(),
-          authenticationRepository: context.read<AuthenticationRepository>()
-
-          // apiRepositoryInterface: context.read<ApiRepositoryInterface>(),
-          // localRepositoryInterface: context.read<LocalRepositoryInterface>(),
-          ),
+        const SignInState(),
+        authenticationRepository: context.read<AuthenticationRepository>(),
+        sessionController: context.read<SessionController>(),
+        favoritesController: context.read<FavoritesController>(),
+        // apiRepositoryInterface: context.read<ApiRepositoryInterface>(),
+        // localRepositoryInterface: context.read<LocalRepositoryInterface>(),
+      ),
       builder: (_, __) => const SignInPage._(),
     );
   }
@@ -65,19 +66,7 @@ class SignInPage extends StatelessWidget {
                       decoration: const InputDecoration(hintText: 'Password'),
                     ),
                     const SizedBox(height: 20),
-                    if (bloc.state.fetching)
-                      const CircularProgressIndicator()
-                    else
-                      MaterialButton(
-                        onPressed: () {
-                          final isValid = Form.of(context).validate();
-                          if (isValid) {
-                            _submit(context);
-                          }
-                        },
-                        color: Colors.blue,
-                        child: const Text('Sign in'),
-                      )
+                    const SubmitButtom(),
                   ],
                 ),
               );
@@ -85,40 +74,6 @@ class SignInPage extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Future _submit(BuildContext context) async {
-    final bloc = context.read<SignInController>();
-    final result = await bloc.submit();
-    if (!bloc.mounted) return;
-
-    result.when(
-      left: (failure) {
-        final message = failure.when(
-          network: () => 'Network Error',
-          notFound: () => 'Not found',
-          unauthorized: () => 'Unauthorized',
-          unknow: () => 'Error',
-          notVerified: () => 'Email not verifies',
-        );
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(message),
-          ),
-        );
-      },
-      right: (user) {
-        final userBloc = Provider.of<SessionController>(context, listen: false);
-        final favoritesBloc = context.read<FavoritesController>();
-
-        userBloc.setUser(user);
-
-        // favoritesBloc.init();
-        //
-        Navigator.pushReplacementNamed(context, Routes.home);
-      },
     );
   }
 }
