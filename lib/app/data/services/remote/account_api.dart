@@ -2,6 +2,7 @@ import '../../../domain/either/either.dart';
 import '../../../domain/failures/http_request/http_request_failure.dart';
 import '../../../domain/models/media/media.dart';
 import '../../../domain/models/user/user.dart';
+import '../../http/failure.dart';
 import '../../http/http.dart';
 import '../../utils/handle_failure.dart';
 import '../local/session_service.dart';
@@ -74,6 +75,38 @@ class AccountAPI {
       },
       right: (value) {
         return Either.right(value);
+      },
+    );
+  }
+
+  Future<Either<HttpRequestFailure, void>> markAsFavorite({
+    required int mediaID,
+    required MediaType type,
+    required bool favorite,
+  }) async {
+    final accountID = await _sessionService.accountID;
+    final sessionID = await _sessionService.sessionID ?? '';
+
+    final response = await _http.request(
+      '/account/$accountID/favorite',
+      method: HttpMethod.post,
+      queryParameters: {
+        'session_id': sessionID,
+      },
+      bodyRequest: {
+        'media_type': type.name,
+        'media_id': mediaID,
+        'favorite': favorite,
+      },
+      onSuccess: (_) {},
+    );
+
+    return response.when(
+      left: (failure) {
+        return handleHttpFailure(failure);
+      },
+      right: (_) {
+        return Either.right(null);
       },
     );
   }

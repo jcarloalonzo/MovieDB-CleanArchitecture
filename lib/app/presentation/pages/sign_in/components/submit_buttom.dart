@@ -30,8 +30,12 @@ class SubmitButtom extends StatelessWidget {
     final bloc = context.read<SignInController>();
     final result = await bloc.submit();
     if (!bloc.mounted) return;
-
-    result.when(
+    print(result);
+    print(result.toString());
+    result.maybeWhen(
+      orElse: () {
+        print('que fueeeee');
+      },
       left: (failure) {
         final message = failure.when(
           network: () => 'Network Error',

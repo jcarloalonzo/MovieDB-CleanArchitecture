@@ -52,7 +52,7 @@ class SignInController extends StateNotifier<SignInState> {
     state = state.copyWith(fetching: true);
     final result =
         await authenticationRepository.signIn(state.username, state.password);
-
+    print(result);
     result.when(
       left: (_) {
         //
