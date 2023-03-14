@@ -7,12 +7,8 @@ class FavoritesAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      titleTextStyle: const TextStyle(color: Colors.black),
       title: const Text('Favorites'),
       centerTitle: true,
-      iconTheme: const IconThemeData(
-        color: Colors.black,
-      ),
       elevation: 0,
       backgroundColor: Colors.white,
       bottom: TabBar(

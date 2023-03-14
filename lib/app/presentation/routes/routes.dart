@@ -8,4 +8,5 @@ class Routes {
   static const movie = '/movie';
   static const offline = '/OffLine';
   static const favorites = '/favorites';
+  static const profile = '/profile';
 }

@@ -24,6 +24,7 @@ import 'app/domain/repositories/trending_repository.dart';
 import 'app/presentation/global/controller/favorites/favorites_controller.dart';
 import 'app/presentation/global/controller/favorites/state/favorites_state.dart';
 import 'app/presentation/global/controller/session_controller.dart';
+import 'app/presentation/global/controller/theme_controller.dart';
 import 'app/presentation/my_app.dart';
 
 void main() {
@@ -83,6 +84,17 @@ void main() {
             TrendingAPI(http),
           ),
         ),
+        //
+        //
+
+//
+//
+//
+
+        ChangeNotifierProvider<ThemeController>(
+          create: (_) => ThemeController(false),
+        ),
+
         //
         //
 

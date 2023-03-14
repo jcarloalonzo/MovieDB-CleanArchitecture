@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../domain/enums.dart';
+import '../../../../global/colors.dart';
+import '../../../../global/extensions/build_context_ext.dart';
 
 class TrendingTimeWindow extends StatelessWidget {
   const TrendingTimeWindow(
@@ -11,19 +13,21 @@ class TrendingTimeWindow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Theme.of(context).textTheme.titleSmall;
+    print(context.textTheme.titleSmall?.fontSize);
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Row(
         children: [
-          const Text(
+          Text(
             'TRENDING',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: context.textTheme.titleSmall,
           ),
           const Spacer(),
           ClipRRect(
             borderRadius: BorderRadius.circular(30),
             child: Material(
-              color: const Color(0xfff0f0f0),
+              color: context.darkMode ? Palette.dark : const Color(0xfff0f0f0),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: DropdownButton<TimeWindow>(

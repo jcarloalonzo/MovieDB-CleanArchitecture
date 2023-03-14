@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../pages/favorites/favorites_page.dart';
 import '../pages/home/home_page.dart';
 import '../pages/offline/pages/offline_page.dart';
+import '../pages/profile/profile_page.dart';
 import '../pages/sign_in/sign_in_page.dart';
 import '../pages/splash/splash_page.dart';
 import 'routes.dart';
@@ -14,5 +15,6 @@ class MyRoutes {
     Routes.home: (context) => HomePage.init(context),
     Routes.offline: (context) => const OffLinePage(),
     Routes.favorites: (context) => const FavoritesPage(),
+    Routes.profile: (context) => const ProfilePage(),
   };
 }

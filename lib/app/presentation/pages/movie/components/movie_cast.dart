@@ -6,6 +6,7 @@ import '../../../../domain/either/either.dart';
 import '../../../../domain/failures/http_request/http_request_failure.dart';
 import '../../../../domain/models/actors/actors.dart';
 import '../../../../domain/repositories/movies_repository.dart';
+import '../../../global/extensions/build_context_ext.dart';
 import '../../../global/widgets/request_failed.dart';
 import '../../../utils/get_image_url.dart';
 
@@ -58,13 +59,7 @@ class _MovieCastState extends State<MovieCast> {
           right: (list) {
             return Column(
               children: [
-                const Text(
-                  'Cast',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                Text('Cast', style: context.textTheme.titleMedium),
                 SizedBox(
                   height: 100,
                   child: ListView.separated(
